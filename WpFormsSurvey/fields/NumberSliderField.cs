@@ -2,7 +2,7 @@
 
 public class NumberSliderField : TextField
 {
-    public int Min { get; set; }
-    public int Max { get; set; }
+    public int Minimum { get; set; }
+    public int Maximum { get; set; }
     public int Step { get; set; }
 }
