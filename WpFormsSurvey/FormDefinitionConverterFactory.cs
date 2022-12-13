@@ -46,9 +46,8 @@ public class FormDefinitionConverterFactory : JsonConverterFactory
         return retVal;
     }
 
-    public override JsonConverter? CreateConverter( Type typeToConvert, JsonSerializerOptions options )
+    public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-
-        throw new NotImplementedException();
+        return new FormDefinitionConverter(_logger);
     }
 }
