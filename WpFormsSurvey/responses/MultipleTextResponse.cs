@@ -1,11 +1,24 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
 public class MultipleTextResponse : ResponseBase
 {
-    [JsonPropertyName("value")]
-    public string RawValue { get; set; } = string.Empty;
+    private string _rawValue = string.Empty;
 
-    public List<string> Values { get; set; } = new();
+    [ JsonPropertyName( "value" ) ]
+    public string RawValue
+    {
+        get => _rawValue;
+
+        set
+        {
+            _rawValue = value;
+
+            Values.Clear();
+            Values.AddRange( _rawValue.Split( '/' ).Select( x => x.Trim() ) );
+        }
+    }
+
+    public List<string> Values { get; } = new();
 }
