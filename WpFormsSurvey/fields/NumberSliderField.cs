@@ -1,5 +1,6 @@
 ﻿namespace WPFormsSurvey;
 
+[JsonFieldName("number-slider")]
 public class NumberSliderField : TextField
 {
     public int Minimum { get; set; }

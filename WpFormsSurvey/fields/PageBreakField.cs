@@ -2,6 +2,7 @@
 
 namespace WPFormsSurvey;
 
+[JsonFieldName("pagebreak")]
 public class PageBreakField : FieldBase
 {
     [JsonPropertyName("title")]

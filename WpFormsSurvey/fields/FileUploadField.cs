@@ -2,6 +2,7 @@
 
 namespace WPFormsSurvey;
 
+[JsonFieldName("file-upload")]
 public class FileUploadField : TextField
 {
     [ JsonPropertyName( "extensions" ) ]
