@@ -1,8 +1,14 @@
-﻿namespace WPFormsSurvey;
+﻿using System.Text.Json.Serialization;
 
-public class ResponseBase
+namespace WpFormsSurvey;
+
+[JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+public class ResponseBase : IJsonField
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Type { get; set; } = string.Empty;
+
+    [JsonPropertyName("name")]
+    public string FieldLabel { get; set; } = string.Empty;
+
+    public virtual bool Initialize() => true;
 }
