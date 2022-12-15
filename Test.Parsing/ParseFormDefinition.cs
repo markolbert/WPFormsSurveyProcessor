@@ -1,16 +1,21 @@
+using System.Dynamic;
 using System.Text.Json;
+using FluentAssertions;
 using WpFormsSurvey;
+using WPFormsSurvey;
 
 namespace Test.Parsing;
 
 public class ParseFormDefinition : TestBase
 {
     [Theory]
-    [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_wpforms_entries.json")]
+    [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_posts.json")]
     public void Test( string filePath )
     {
-        var options = new JsonSerializerOptions { Converters = { new FormDefinitionConverterFactory(Logger) } };
+        var parser = new WpPostsParser( Logger );
+        var result = parser.ParseFile( filePath );
 
-        var parsed = JsonSerializer.Deserialize<(string.Empty, options);
+        result.Should().NotBeNull();
+        result!.IsValid.Should().BeTrue();
     }
 }
