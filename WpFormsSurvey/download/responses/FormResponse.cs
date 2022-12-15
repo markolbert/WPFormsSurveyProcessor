@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
-public class SurveyResponse
+[JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+public class FormResponse
 {
     private string _rawFields = string.Empty;
 
@@ -11,9 +13,12 @@ public class SurveyResponse
 
     [JsonPropertyName("form_id")]
     public int FormId { get; set; }
+
+    [JsonConverter(typeof(DateTimeConverter))]
     public DateTime Date { get; set; }
 
     [JsonPropertyName("date_modified")]
+    [JsonConverter(typeof(DateTimeConverter))]
     public DateTime DateModified { get; set; }
 
     [JsonPropertyName("ip_address")]
@@ -21,24 +26,7 @@ public class SurveyResponse
     public string Status { get; set; } = string.Empty;
 
     [ JsonPropertyName( "fields" ) ]
-    public string RawFields
-    {
-        get => _rawFields;
-
-        set
-        {
-            _rawFields = value;
-            ParseFields( value );
-        }
-    }
-
-    private void ParseFields( string raw )
-    {
-        Responses.Clear();
-
-        if( string.IsNullOrEmpty( raw ) )
-            return;
-    }
+    public JsonElement RawResponses { get; set; }
 
     public List<ResponseBase> Responses { get; } = new();
 }

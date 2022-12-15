@@ -1,10 +1,9 @@
 ﻿using System.Net;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using WpFormsSurvey;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
 public class FormDefinition
@@ -31,6 +30,7 @@ public class FormDefinition
     [JsonPropertyName("post_content")]
     public string? PostContent { get; set; }
 
+    [JsonIgnore]
     public List<FieldBase> Fields { get; set; } = new();
 
     public bool HasSurveyFields =>
@@ -43,5 +43,3 @@ public class FormDefinition
         where TField : FieldBase =>
         Fields.Any( x => x.GetType().IsAssignableTo( typeof( TField ) ) );
 }
-
-public record SurveyPostContent( JsonElement Fields );
