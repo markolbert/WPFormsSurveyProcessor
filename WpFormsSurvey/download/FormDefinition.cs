@@ -7,7 +7,7 @@ using WpFormsSurvey;
 namespace WPFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class SurveyDefinition
+public class FormDefinition
 {
     public int Id { get; set; }
 
@@ -32,6 +32,16 @@ public class SurveyDefinition
     public string? PostContent { get; set; }
 
     public List<FieldBase> Fields { get; set; } = new();
+
+    public bool HasSurveyFields =>
+        Fields.Any( x => x.SurveyField )
+     || HasFields<RadioField>()
+     || HasFields<CheckboxField>()
+     || HasFields<SelectField>();
+
+    public bool HasFields<TField>()
+        where TField : FieldBase =>
+        Fields.Any( x => x.GetType().IsAssignableTo( typeof( TField ) ) );
 }
 
 public record SurveyPostContent( JsonElement Fields );

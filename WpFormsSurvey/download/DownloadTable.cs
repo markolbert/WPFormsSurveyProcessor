@@ -2,4 +2,4 @@
 
 namespace WpFormsSurvey;
 
-public record DownloadTable( string Name, string Database, List<SurveyDefinition>? Data );
+public record DownloadTable( string Name, string Database, List<FormDefinition>? Data );
