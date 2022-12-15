@@ -5,11 +5,14 @@ using J4JSoftware.Logging;
 namespace WPFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class FieldBase
+public class FieldBase : IJsonField
 {
     protected FieldBase()
     {
     }
+
+    public virtual bool IsValid => true;
+    public virtual bool Initialize() => true;
 
     public int Id { get; set; }
 
