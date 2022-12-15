@@ -1,6 +1,5 @@
 ﻿namespace WPFormsSurvey;
 
-public class RadioField : TextField
+public class RadioField : ChoicesField
 {
-    public List<FieldChoice> Choices { get; set; } = new();
 }

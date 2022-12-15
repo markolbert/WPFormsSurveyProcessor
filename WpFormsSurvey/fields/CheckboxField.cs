@@ -1,6 +1,5 @@
 ﻿namespace WPFormsSurvey;
 
-public class CheckboxField : FieldBase
+public class CheckboxField : ChoicesField
 {
-    public List<FieldChoice> Choices { get; set; } = new();
 }

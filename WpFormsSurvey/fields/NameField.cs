@@ -1,6 +1,17 @@
-﻿namespace WPFormsSurvey;
+﻿using System.Text.Json.Serialization;
 
-public class NameField : TextField
+namespace WPFormsSurvey;
+
+public class NameField : FormattedField
 {
-    public string Format { get; set; } = string.Empty;
+}
+
+public class PhoneField : FormattedField
+{
+}
+
+public class HtmlField : FieldBase
+{
+    [JsonPropertyName("code")]
+    public string Code { get; set; } = string.Empty;
 }
