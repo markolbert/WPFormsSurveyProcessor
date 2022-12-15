@@ -203,12 +203,7 @@ public class WpPostsParser
                 {
                     if( !newField.Initialize() )
                         _logger.Error<string>("{0} field failed to initialize", fieldDef.Type);
-                    else
-                    {
-                        if( newField.IsValid )
-                            surveyDef.Fields.Add(newField);
-                        else _logger.Error<string>("{0} field is invalid", fieldDef.Type);
-                    }
+                    else surveyDef.Fields.Add(newField);
                 }
             }
         }
