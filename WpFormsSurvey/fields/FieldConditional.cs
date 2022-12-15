@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace WpFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 public class FieldConditional
 {
