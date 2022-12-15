@@ -10,8 +10,8 @@ namespace Test.Parsing;
 public class ParseFormDefinition : TestBase
 {
     [Theory]
-    [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_posts.json")]
-    public void Test( string filePath )
+    [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_posts.json", true)]
+    public void Test( string filePath, bool hasSurveys )
     {
         var parser = new WpPostsParser( Logger );
         var result = parser.ParseFile( filePath );
@@ -21,7 +21,11 @@ public class ParseFormDefinition : TestBase
         result.Table!.Data.Should().NotBeNull();
         result.IsValid.Should().BeTrue();
 
-        foreach( var choiceField in result.Table.Data!.SelectMany( x => x.Fields )
+        var surveyDefs = result.Table!.Data!.Where( x => x.HasSurveyFields ).ToList();
+        if( hasSurveys)
+            surveyDefs.Should().NotBeEmpty();
+
+        foreach( var choiceField in surveyDefs.SelectMany( x => x.Fields )
                                           .Where( x => x.GetType().IsAssignableTo( typeof( ChoicesField ) ) )
                                           .Cast<ChoicesField>() )
         {
@@ -31,7 +35,7 @@ public class ParseFormDefinition : TestBase
             }
         }
 
-        foreach (var likertField in result.Table.Data!.SelectMany(x => x.Fields)
+        foreach (var likertField in surveyDefs.SelectMany(x => x.Fields)
                                           .Where(x => x.GetType().IsAssignableTo(typeof(LikertField)))
                                           .Cast<LikertField>())
         {
