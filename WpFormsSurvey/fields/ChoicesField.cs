@@ -31,7 +31,7 @@ public class ChoicesField : FieldBase
 
         foreach( var choice in RawChoices.EnumerateObject() )
         {
-            var temp = JsonSerializer.Deserialize<FieldChoice>( choice.Value.GetRawText() );
+            var temp = JsonSerializer.Deserialize<FieldChoice>( choice.Value.GetRawText(), _options );
 
             if( temp == null )
                 retVal = false;
