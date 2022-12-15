@@ -3,7 +3,6 @@ using System.Text.Json;
 using FluentAssertions;
 using FluentAssertions.Equivalency.Steps;
 using WpFormsSurvey;
-using WPFormsSurvey;
 
 namespace Test.Parsing;
 
@@ -13,7 +12,7 @@ public class ParseFormDefinition : TestBase
     [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_posts.json", true)]
     public void Test( string filePath, bool hasSurveys )
     {
-        var parser = new WpPostsParser( Logger );
+        var parser = new WpFormsParser( Logger );
         var result = parser.ParseFile( filePath );
 
         result.Should().NotBeNull();

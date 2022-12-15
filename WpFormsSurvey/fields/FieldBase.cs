@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using J4JSoftware.Logging;
 using WpFormsSurvey;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
 public class FieldBase : IJsonField

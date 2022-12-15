@@ -1,4 +1,4 @@
-﻿namespace WPFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 [JsonFieldName("content")]
 public class ContentField : FieldBase

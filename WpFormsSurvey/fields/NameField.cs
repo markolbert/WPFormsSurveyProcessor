@@ -1,4 +1,4 @@
-﻿namespace WPFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 [JsonFieldName("name")]
 public class NameField : FormattedField

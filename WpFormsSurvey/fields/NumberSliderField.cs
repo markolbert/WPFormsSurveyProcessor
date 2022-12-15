@@ -1,4 +1,4 @@
-﻿namespace WPFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 [JsonFieldName("number-slider")]
 public class NumberSliderField : TextField

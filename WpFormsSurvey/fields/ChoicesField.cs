@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
 public class ChoicesField : FieldBase
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
 [JsonFieldName("pagebreak")]
 public class PageBreakField : FieldBase

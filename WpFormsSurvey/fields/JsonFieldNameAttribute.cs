@@ -1,14 +1,14 @@
-﻿namespace WPFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public class JsonFieldNameAttribute : Attribute
 {
     public JsonFieldNameAttribute(
-        string fieldName
+        string entityName
     )
     {
-        FieldName = fieldName;
+        EntityName = entityName;
     }
 
-    public string FieldName { get; }
+    public string EntityName { get; }
 }

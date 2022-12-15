@@ -1,4 +1,4 @@
-﻿namespace WPFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 public class FormattedField : TextField
 {

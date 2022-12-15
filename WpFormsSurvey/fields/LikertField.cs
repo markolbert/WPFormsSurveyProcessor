@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using WpFormsSurvey;
 
-namespace WPFormsSurvey;
+namespace WpFormsSurvey;
 
 [JsonFieldName("likert-scale")]
 public class LikertField : TextField
