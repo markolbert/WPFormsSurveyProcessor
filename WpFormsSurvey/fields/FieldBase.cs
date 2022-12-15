@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using J4JSoftware.Logging;
+using WpFormsSurvey;
 
 namespace WPFormsSurvey;
 
@@ -14,6 +15,9 @@ public class FieldBase : IJsonField
     public virtual bool Initialize() => true;
 
     public int Id { get; set; }
+
+    [JsonConverter(typeof(WpFormsBooleanConverter))]
+    public bool SurveyField { get; set; }
 
     [JsonPropertyName("conditional_logic")]
     public int ConditionalLogic { get; set; }
