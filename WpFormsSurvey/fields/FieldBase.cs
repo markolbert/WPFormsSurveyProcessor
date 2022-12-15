@@ -11,7 +11,6 @@ public class FieldBase : IJsonField
     {
     }
 
-    public virtual bool IsValid => true;
     public virtual bool Initialize() => true;
 
     public int Id { get; set; }
