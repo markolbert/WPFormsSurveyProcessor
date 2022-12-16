@@ -1,6 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using J4JSoftware.Logging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WpFormsSurvey;
 
@@ -9,24 +12,24 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
     public WpResponsesParser(
         IJ4JLogger logger
     )
-        : base(logger)
+        : base( logger )
     {
-        RegisterEntityTypes(GetType().Assembly);
+        RegisterEntityTypes( GetType().Assembly );
     }
 
-    public ResponseDownload? ParseFile(string filePath)
+    public ResponseDownload? ParseFile( List<FormDefinition> forms, string filePath )
     {
-        if (!File.Exists(filePath))
+        if( !File.Exists( filePath ) )
         {
-            Logger.Error<string>("File '{0}' does not exist or is not accessible", filePath);
+            Logger.Error<string>( "File '{0}' does not exist or is not accessible", filePath );
             return null;
         }
 
-        var rawJson = JsonSerializer.Deserialize<JsonElement>(File.ReadAllText(filePath));
+        var rawJson = JsonSerializer.Deserialize<JsonElement>( File.ReadAllText( filePath ) );
 
-        if (rawJson.ValueKind != JsonValueKind.Array)
+        if( rawJson.ValueKind != JsonValueKind.Array )
         {
-            Logger.Error<string>("{0} did not parse to a JSON array", filePath);
+            Logger.Error<string>( "{0} did not parse to a JSON array", filePath );
             return null;
         }
 
@@ -34,90 +37,107 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
 
         var retVal = new ResponseDownload();
 
-        foreach (var element in rawJson.EnumerateArray())
+        foreach( var element in rawJson.EnumerateArray() )
         {
             var text = element.GetRawText();
 
-            var objType = JsonSerializer.Deserialize<WpType>(text, options);
-            if (objType == null)
+            var objType = JsonSerializer.Deserialize<WpType>( text, options );
+            if( objType == null )
             {
-                Logger.Error("Could not determine object type for header object");
+                Logger.Error( "Could not determine object type for header object" );
                 return null;
             }
 
             var type = objType.Type.ToLower();
             var objText = element.GetRawText();
 
-            switch (type)
+            switch( type )
             {
                 case "header":
-                    retVal.Header = JsonSerializer.Deserialize<DownloadHeader>(objText, options);
+                    retVal.Header = JsonSerializer.Deserialize<DownloadHeader>( objText, options );
                     break;
 
                 case "database":
-                    retVal.Database = JsonSerializer.Deserialize<DownloadDatabase>(objText, options);
+                    retVal.Database = JsonSerializer.Deserialize<DownloadDatabase>( objText, options );
                     break;
 
                 case "table":
-                    retVal.Table = JsonSerializer.Deserialize<DownloadResponseTable>(objText, options);
+                    retVal.Table = JsonSerializer.Deserialize<DownloadResponseTable>( objText, options );
                     break;
 
                 default:
-                    Logger.Warning<string>("Unexpected download header type '{0}' encountered", type);
+                    Logger.Warning<string>( "Unexpected download header type '{0}' encountered", type );
                     break;
             }
         }
 
-        if (!retVal.IsValid)
-            Logger.Error("Forms response download failed to parse completely");
-        else ParseResponses(retVal);
+        if( !retVal.IsValid )
+            Logger.Error( "Forms response download failed to parse completely" );
+        else ParseResponses( retVal, forms );
 
         return retVal;
     }
 
-    private void ParseResponses(ResponseDownload download)
+    private void ParseResponses( ResponseDownload download, List<FormDefinition> forms )
     {
         var options = new JsonSerializerOptions
         {
-            PropertyNameCaseInsensitive = true,
+            PropertyNameCaseInsensitive = true, 
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
 
-        foreach (var responseDef in download.Table!.Data!)
+        foreach( var responseDef in download.Table!.Data! )
         {
-            var rawText = responseDef.Fields.GetRawText();
-            if (string.IsNullOrEmpty(rawText  ))
+            // find the form we're processing responses for
+            var form = forms.FirstOrDefault( x => x.Id == responseDef.FormId );
+            if( form == null )
+            {
+                Logger.Error( "Could not find form with Id {0}", responseDef.FormId );
+                continue;
+            }
+
+            if( string.IsNullOrEmpty( responseDef.Fields ) )
                 continue;
 
-            var fieldsContent = JsonSerializer.Deserialize<FieldsContent>(rawText, options);
+            var fieldsElement = JsonSerializer.Deserialize<JsonElement>( responseDef.Fields, options );
 
-            // for some strange reason, some WpForms forms have the Fields object as a JsonArray, and some 
-            // have it as a JsonObject. We need to accomodate both
-            var respDefEnumerator = fieldsContent!.Fields.ValueKind switch
+            foreach ( var responseObj in fieldsElement.EnumerateObject() )
             {
-                JsonValueKind.Array => EnumerateFieldsArray(fieldsContent.Fields, options),
-                JsonValueKind.Object => EnumerateFieldsObject(fieldsContent.Fields, options),
-                _ => UnsupportedEnumerator(fieldsContent.Fields.ValueKind)
-            };
+                var responseText = responseObj.Value.GetRawText();
 
-            foreach (var respDef in respDefEnumerator)
-            {
-                if (!EntityTypes.ContainsKey(respDef.Type))
+                var respType = JsonSerializer.Deserialize<WpType>(responseText, options);
+                if( respType == null )
                 {
-                    Logger.Warning<string>("No response type is registered for key '{0}'", respDef.Type);
+                    Logger.Error("Could not parse WpType"  );
                     continue;
                 }
 
-                var newResponse = (ResponseBase?)EntityTypes[respDef.Type]
-                                       .DeserializerInfo.Invoke(null, new object[] { respDef.FieldText, options });
+                if ( !EntityTypes.ContainsKey( respType.Type ) )
+                {
+                    Logger.Warning<string>( "No response type is registered for key '{0}'", respType.Type );
+                    continue;
+                }
 
-                if (newResponse == null)
-                    Logger.Error<string>("Failed to parse survey response, type '{0}'", respDef.Type);
+                var newResponse = (ResponseBase?) EntityTypes[ respType.Type ]
+                                                 .DeserializerInfo
+                                                 .Invoke( null, new object[] { responseText, options } );
+
+                if( newResponse == null )
+                    Logger.Error<string>( "Failed to parse survey response, type '{0}'", responseText );
                 else
                 {
-                    if (!newResponse.Initialize())
-                        Logger.Error<string>("{0} response failed to initialize", respDef.Type);
-                    else responseDef.Responses.Add(newResponse);
+                    // find the field we're a response to
+                    var field = form.Fields.FirstOrDefault( x => x.Id == newResponse.Id );
+                    if( field == null )
+                        Logger.Error<int, string>( "Could not find field with Id {0} in form '{1}'",
+                                                   newResponse.Id,
+                                                   form.PostTitle );
+                    else
+                    {
+                        if( !newResponse.Initialize( field ) )
+                            Logger.Error<string>( "{0} response failed to initialize", respType.Type );
+                        else responseDef.Responses.Add( newResponse );
+                    }
                 }
             }
         }

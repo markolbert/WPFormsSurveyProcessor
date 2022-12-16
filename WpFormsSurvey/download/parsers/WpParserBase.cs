@@ -54,15 +54,11 @@ public class WpParserBase<TEntity>
 
     public bool RegisterEntityType(Type entityType)
     {
-        if (!entityType.IsAssignableTo(typeof(TEntity)))
-        {
-            Logger.Error("{0} does not derive from {1}", entityType, typeof(TEntity));
-            return false;
-        }
-        if (typeof(IJsonField).IsAssignableFrom(entityType))
-            return RegisterFieldInternal(entityType);
+        if( entityType.IsAssignableTo( typeof( TEntity ) ) )
+            return RegisterFieldInternal( entityType );
 
-        Logger.Error("{0} does not implement IJsonField", entityType);
+        Logger.Error("{0} does not derive from {1}", entityType, typeof(TEntity));
+
         return false;
     }
 
@@ -70,11 +66,10 @@ public class WpParserBase<TEntity>
     {
         var retVal = true;
 
-        foreach (var type in assembly.GetTypes()
-                                     .Where(x => x.IsAssignableTo(typeof(TEntity))
-                                              && typeof(IJsonField).IsAssignableFrom(x)))
+        foreach( var type in assembly.GetTypes()
+                                     .Where( x => x.IsAssignableTo( typeof( TEntity ) ) ) )
         {
-            retVal &= RegisterFieldInternal(type);
+            retVal &= RegisterFieldInternal( type );
         }
 
         return retVal;
@@ -82,10 +77,11 @@ public class WpParserBase<TEntity>
 
     private bool RegisterFieldInternal(Type entityType)
     {
-        var attr = entityType.GetCustomAttribute<JsonFieldNameAttribute>(false);
-        if (attr == null)
+        var attributes = entityType.GetCustomAttributes<WpFormsFieldTypeAttribute>( false )
+                                   .ToList();
+        if (!attributes.Any())
         {
-            Logger.Error("{0} is not decorated with a JsonFieldNameAttribute", entityType);
+            Logger.Error("{0} is not decorated with any WpFormsFieldTypeAttributes", entityType);
             return false;
         }
 
@@ -97,12 +93,15 @@ public class WpParserBase<TEntity>
 
         var entityInfo = new EntityInfo(entityType, GenericDeserializer!.MakeGenericMethod(entityType));
 
-        if (EntityTypes.ContainsKey(attr.EntityName))
+        foreach( var attribute in attributes )
         {
-            EntityTypes[attr.EntityName] = entityInfo;
-            Logger.Information<string>("Replaced IJsonField for field '{0}'", attr.EntityName);
+            if (EntityTypes.ContainsKey(attribute.EntityName))
+            {
+                EntityTypes[attribute.EntityName] = entityInfo;
+                Logger.Information<string>("Replaced IWpFormsField for field '{0}'", attribute.EntityName);
+            }
+            else EntityTypes.Add(attribute.EntityName, entityInfo);
         }
-        else EntityTypes.Add(attr.EntityName, entityInfo);
 
         return true;
     }

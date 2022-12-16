@@ -12,11 +12,18 @@ public class ResponseDefinition
     [JsonPropertyName("form_id")]
     public int FormId { get; set; }
 
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonPropertyName("user_id")]
+    public int UserId { get; set; }
+
+    [JsonPropertyName("user_uuid")]
+    [JsonConverter(typeof(WpGuidConverter))]
+    public Guid UserGuid { get; set; }
+        
+    [JsonConverter(typeof(WpDateTimeConverter))]
     public DateTime Date { get; set; }
 
     [JsonPropertyName("date_modified")]
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonConverter(typeof(WpDateTimeConverter))]
     public DateTime DateModified { get; set; }
 
     [JsonPropertyName("ip_address")]
@@ -24,7 +31,7 @@ public class ResponseDefinition
     public string Status { get; set; } = string.Empty;
 
     [JsonPropertyName("fields")]
-    public JsonElement Fields { get; set; }
+    public string? Fields { get; set; }
 
     [JsonIgnore]
     public List<ResponseBase> Responses { get; set; } = new();

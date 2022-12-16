@@ -114,7 +114,7 @@ public class WpFormsParser : WpParserBase<FieldBase>
                     Logger.Error<string>("Failed to parse survey field, type '{0}'", fieldDef.Type);
                 else
                 {
-                    if (!newField.Initialize())
+                    if (!newField.Initialize(formDef))
                         Logger.Error<string>("{0} field failed to initialize", fieldDef.Type);
                     else formDef.Fields.Add(newField);
                 }

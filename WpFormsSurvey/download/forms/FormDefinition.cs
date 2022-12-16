@@ -10,11 +10,11 @@ public class FormDefinition
     [JsonPropertyName("post_author")]
     public string PostAuthor { get; set; } = string.Empty;
 
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonConverter(typeof(WpDateTimeConverter))]
     [JsonPropertyName("post_date")]
     public DateTime PostDate { get; set; }
 
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonConverter(typeof(WpDateTimeConverter))]
     [JsonPropertyName("post_date_gmt")]
     public DateTime PostDateGmt { get; set; }
 
@@ -32,9 +32,7 @@ public class FormDefinition
 
     public bool HasSurveyFields =>
         Fields.Any( x => x.SurveyField )
-     || HasFields<RadioField>()
-     || HasFields<CheckboxField>()
-     || HasFields<SelectField>();
+     || HasFields<ChoicesField>();
 
     public bool HasFields<TField>()
         where TField : FieldBase =>
