@@ -3,13 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace WpFormsSurvey;
 
+[WpFormsFieldType("select")]
+[WpFormsFieldType("radio")]
 public class ChoicesField : FieldBase
 {
     private readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
-
-    protected ChoicesField()
-    {
-    }
 
     [JsonPropertyName("choices")]
     public JsonElement RawChoices { get; set; }
@@ -17,9 +15,9 @@ public class ChoicesField : FieldBase
     [JsonIgnore]
     public List<FieldChoice> Choices { get; } = new();
 
-    public override bool Initialize()
+    public override bool Initialize( FormDefinition formDef )
     {
-        if( !base.Initialize() )
+        if( !base.Initialize( formDef ) )
             return false;
 
         // choices are stored as JSON objects with invalid C# names

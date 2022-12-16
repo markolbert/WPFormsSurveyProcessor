@@ -1,6 +1,6 @@
 ﻿namespace WpFormsSurvey;
 
-[JsonFieldName("number-slider")]
+[WpFormsFieldType("number-slider")]
 public class NumberSliderField : TextField
 {
     public int Minimum { get; set; }

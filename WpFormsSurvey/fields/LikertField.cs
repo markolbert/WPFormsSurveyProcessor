@@ -1,9 +1,10 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using J4JSoftware.Logging;
 
 namespace WpFormsSurvey;
 
-[JsonFieldName("likert-scale")]
+[WpFormsFieldType("likert-scale")]
 public class LikertField : TextField
 {
     [JsonPropertyName("single_row")]
@@ -22,9 +23,9 @@ public class LikertField : TextField
     [JsonIgnore]
     public List<string> Columns { get; } = new();
 
-    public override bool Initialize()
+    public override bool Initialize( FormDefinition formDef )
     {
-        if( !base.Initialize() )
+        if( !base.Initialize(formDef))
             return false;
 
         // WpForms stores rows and columns as JsonObjects with each property corresponding
@@ -45,4 +46,5 @@ public class LikertField : TextField
 
         return true;
     }
+
 }

@@ -2,7 +2,7 @@
 
 namespace WpFormsSurvey;
 
-[JsonFieldName("checkbox")]
+[WpFormsFieldType("checkbox")]
 public class CheckboxField : ChoicesField
 {
     [JsonPropertyName("choice_limit")]

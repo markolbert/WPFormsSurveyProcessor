@@ -3,15 +3,20 @@
 namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class FieldBase : IJsonField
+public class FieldBase
 {
-    protected FieldBase()
+    public FormDefinition? Form { get; private set; }
+
+    public virtual bool Initialize( FormDefinition formDef )
     {
+        Form = formDef;
+        return true;
     }
 
-    public virtual bool Initialize() => true;
-
     public int Id { get; set; }
+
+    [JsonPropertyName("type")]
+    public string FieldType { get; set; } = string.Empty;
 
     [JsonConverter(typeof(WpFormsBooleanConverter))]
     public bool SurveyField { get; set; }

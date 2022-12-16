@@ -2,7 +2,7 @@
 
 namespace WpFormsSurvey;
 
-[JsonFieldName("pagebreak")]
+[WpFormsFieldType("pagebreak")]
 public class PageBreakField : FieldBase
 {
     [JsonPropertyName("title")]

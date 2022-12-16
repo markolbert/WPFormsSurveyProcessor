@@ -2,7 +2,7 @@
 
 namespace WpFormsSurvey;
 
-[JsonFieldName("html")]
+[WpFormsFieldType("html")]
 public class HtmlField : FieldBase
 {
     [JsonPropertyName("code")]
