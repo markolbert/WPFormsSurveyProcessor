@@ -11,7 +11,7 @@ public class ResponseBase
     [JsonPropertyName("name")]
     public string FieldLabel { get; set; } = string.Empty;
 
-    public FormDefinition? Form => Field?.Form;
+    public Form? Form => Field?.Form;
     public FieldBase? Field { get; private set; }
 
     public virtual bool Initialize( FieldBase field )

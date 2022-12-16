@@ -23,7 +23,7 @@ public class LikertField : TextField
     [JsonIgnore]
     public List<string> Columns { get; } = new();
 
-    public override bool Initialize( FormDefinition formDef )
+    public override bool Initialize( Form formDef )
     {
         if( !base.Initialize(formDef))
             return false;

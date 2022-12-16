@@ -1,6 +1,6 @@
 ﻿namespace WpFormsSurvey;
 
-public record DownloadResponseTable( string Name, string Database, List<ResponseDefinition>? Data )
+public record Entries( string Name, string Database, List<Entry>? Data )
 {
     public List<int> FormIds =>
         Data?.Select( x => x.FormId )

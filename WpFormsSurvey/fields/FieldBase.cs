@@ -5,9 +5,9 @@ namespace WpFormsSurvey;
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
 public class FieldBase
 {
-    public FormDefinition? Form { get; private set; }
+    public Form? Form { get; private set; }
 
-    public virtual bool Initialize( FormDefinition formDef )
+    public virtual bool Initialize( Form formDef )
     {
         Form = formDef;
         return true;

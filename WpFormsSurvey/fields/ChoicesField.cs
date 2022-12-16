@@ -15,7 +15,7 @@ public class ChoicesField : FieldBase
     [JsonIgnore]
     public List<FieldChoice> Choices { get; } = new();
 
-    public override bool Initialize( FormDefinition formDef )
+    public override bool Initialize( Form formDef )
     {
         if( !base.Initialize( formDef ) )
             return false;

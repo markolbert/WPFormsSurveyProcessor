@@ -3,7 +3,7 @@
 namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class FormDefinition
+public class Form
 {
     public int Id { get; set; }
 

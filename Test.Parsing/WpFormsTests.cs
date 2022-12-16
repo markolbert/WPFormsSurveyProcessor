@@ -75,7 +75,7 @@ public class WpFormsTests : TestBase
 
         var sb = new StringBuilder();
 
-        foreach( var formInfo in forms.Table.Forms )
+        foreach( var formInfo in forms.Table.SummaryInfo )
         {
             sb.Append( $"{formInfo.Id}\t{formInfo.Name}\n" );
         }

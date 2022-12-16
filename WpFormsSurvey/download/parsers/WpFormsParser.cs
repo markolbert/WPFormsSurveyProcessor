@@ -14,7 +14,7 @@ public class WpFormsParser : WpParserBase<FieldBase>
         RegisterEntityTypes(GetType().Assembly);
     }
 
-    public FormDownload? ParseFile(string filePath)
+    public FormsDownload? ParseFile(string filePath)
     {
         if (!File.Exists(filePath))
         {
@@ -32,7 +32,7 @@ public class WpFormsParser : WpParserBase<FieldBase>
 
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        var retVal = new FormDownload();
+        var retVal = new FormsDownload();
 
         foreach (var element in rawJson.EnumerateArray())
         {
@@ -51,15 +51,15 @@ public class WpFormsParser : WpParserBase<FieldBase>
             switch (type)
             {
                 case "header":
-                    retVal.Header = JsonSerializer.Deserialize<DownloadHeader>(objText, options);
+                    retVal.Header = JsonSerializer.Deserialize<Header>(objText, options);
                     break;
 
                 case "database":
-                    retVal.Database = JsonSerializer.Deserialize<DownloadDatabase>(objText, options);
+                    retVal.Database = JsonSerializer.Deserialize<Database>(objText, options);
                     break;
 
                 case "table":
-                    retVal.Table = JsonSerializer.Deserialize<DownloadFormTable>(objText, options);
+                    retVal.Table = JsonSerializer.Deserialize<Forms>(objText, options);
                     break;
 
                 default:
@@ -75,7 +75,7 @@ public class WpFormsParser : WpParserBase<FieldBase>
         return retVal;
     }
 
-    private void ParseForms(FormDownload download)
+    private void ParseForms(FormsDownload download)
     {
         var options = new JsonSerializerOptions
         {
