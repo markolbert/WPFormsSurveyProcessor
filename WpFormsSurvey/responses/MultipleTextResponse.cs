@@ -2,6 +2,7 @@
 
 namespace WpFormsSurvey;
 
+[WpFormsFieldType("checkbox")]
 public class MultipleTextResponse : ResponseBase
 {
     private string _rawValue = string.Empty;
@@ -16,7 +17,7 @@ public class MultipleTextResponse : ResponseBase
             _rawValue = value;
 
             Values.Clear();
-            Values.AddRange( _rawValue.Split( '/' ).Select( x => x.Trim() ) );
+            Values.AddRange( _rawValue.Split( "\n" ).Select( x => x.Trim() ) );
         }
     }
 

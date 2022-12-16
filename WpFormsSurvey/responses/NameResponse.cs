@@ -1,5 +1,6 @@
 ﻿namespace WpFormsSurvey;
 
+[WpFormsFieldType("name")]
 public class NameResponse : ResponseBase
 {
     public string First { get; set; } = string.Empty;
