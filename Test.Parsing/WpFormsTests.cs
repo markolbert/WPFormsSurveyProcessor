@@ -1,4 +1,5 @@
 using System.Dynamic;
+using System.Text;
 using System.Text.Json;
 using FluentAssertions;
 using FluentAssertions.Equivalency.Steps;
@@ -6,11 +7,11 @@ using WpFormsSurvey;
 
 namespace Test.Parsing;
 
-public class ParseFormDefinition : TestBase
+public class WpFormsTests : TestBase
 {
     [Theory]
     [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_posts.json", true)]
-    public void Test( string filePath, bool hasSurveys )
+    public void ParseFormDefinitions( string filePath, bool hasSurveys )
     {
         var parser = new WpFormsParser( Logger );
         var result = parser.ParseFile( filePath );
@@ -57,5 +58,36 @@ public class ParseFormDefinition : TestBase
                 column.Should().NotBeNullOrEmpty();
             }
         }
+    }
+
+    [Theory]
+    [InlineData("C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_posts.json",
+                "C:\\Users\\mark\\OneDrive - arcabama\\Ardsley73\\surveys\\wp_wpforms_entries.json")]
+    public void ParseResponses(string formsPath, string responsesPath )
+    {
+        var formsParser = new WpFormsParser(Logger);
+        var forms = formsParser.ParseFile(formsPath);
+
+        forms.Should().NotBeNull();
+        forms!.Table.Should().NotBeNull();
+        forms.Table!.Data.Should().NotBeNull();
+        forms.IsValid.Should().BeTrue();
+
+        var sb = new StringBuilder();
+
+        foreach( var formInfo in forms.Table.Forms )
+        {
+            sb.Append( $"{formInfo.Id}\t{formInfo.Name}\n" );
+        }
+
+        var temp = sb.ToString();
+        
+        var responsesParser = new WpResponsesParser(Logger);
+        var responses = responsesParser.ParseFile( forms.Table.Data!, responsesPath );
+
+        responses.Should().NotBeNull();
+        responses!.Table.Should().NotBeNull();
+        responses.Table!.Data.Should().NotBeNull();
+        responses.IsValid.Should().BeTrue();
     }
 }
