@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace WpFormsSurvey;
-public class DateTimeConverter : JsonConverter<DateTime>
+public class WpDateTimeConverter : JsonConverter<DateTime>
 {
     public override DateTime Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
