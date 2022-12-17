@@ -7,6 +7,8 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace WpFormsSurvey;
 
+public record IndividualResponse( int FormId, int FieldId, ResponseBase Response );
+
 public class WpResponsesParser : WpParserBase<ResponseBase>
 {
     public WpResponsesParser(
@@ -17,7 +19,7 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
         RegisterEntityTypes( GetType().Assembly );
     }
 
-    public Responses? ParseFile( List<Form> forms, string filePath )
+    public Responses? ParseFile( string filePath )
     {
         if( !File.Exists( filePath ) )
         {
@@ -73,12 +75,12 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
 
         if( !retVal.IsValid )
             Logger.Error( "Forms response download failed to parse completely" );
-        else ParseResponses( retVal, forms );
+        else ParseResponses( retVal );
 
         return retVal;
     }
 
-    private void ParseResponses( Responses download, List<Form> forms )
+    private void ParseResponses( Responses download )
     {
         var options = new JsonSerializerOptions
         {
@@ -88,14 +90,6 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
 
         foreach( var responseDef in download.Table!.Data! )
         {
-            // find the form we're processing responses for
-            var form = forms.FirstOrDefault( x => x.Id == responseDef.FormId );
-            if( form == null )
-            {
-                Logger.Error( "Could not find form with Id {0}", responseDef.FormId );
-                continue;
-            }
-
             if( string.IsNullOrEmpty( responseDef.Fields ) )
                 continue;
 
@@ -124,21 +118,7 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
 
                 if( newResponse == null )
                     Logger.Error<string>( "Failed to parse survey response, type '{0}'", responseText );
-                else
-                {
-                    // find the field we're a response to
-                    var field = form.Fields.FirstOrDefault( x => x.Id == newResponse.Id );
-                    if( field == null )
-                        Logger.Error<int, string>( "Could not find field with Id {0} in form '{1}'",
-                                                   newResponse.Id,
-                                                   form.PostTitle );
-                    else
-                    {
-                        if( !newResponse.Initialize( field ) )
-                            Logger.Error<string>( "{0} response failed to initialize", respType.Type );
-                        else responseDef.Responses.Add( newResponse );
-                    }
-                }
+                else responseDef.Responses.Add( newResponse );
             }
         }
     }

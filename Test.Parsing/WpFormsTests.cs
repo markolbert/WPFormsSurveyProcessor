@@ -83,7 +83,7 @@ public class WpFormsTests : TestBase
         var temp = sb.ToString();
         
         var responsesParser = new WpResponsesParser(Logger);
-        var responses = responsesParser.ParseFile( forms.Table.Data!, responsesPath );
+        var responses = responsesParser.ParseFile( responsesPath );
 
         responses.Should().NotBeNull();
         responses!.Table.Should().NotBeNull();
