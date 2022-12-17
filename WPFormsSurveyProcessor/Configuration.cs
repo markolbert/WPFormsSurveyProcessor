@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using J4JSoftware.DeusEx;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
-namespace WPFormsSurveyProcessor;
+﻿namespace WPFormsSurveyProcessor;
 
 public class Configuration
 {

@@ -1,13 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
-using Autofac;
 using J4JSoftware.Configuration.CommandLine;
 using J4JSoftware.DependencyInjection;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Serilog;
-using WpFormsSurvey;
 
 namespace WPFormsSurveyProcessor;
 

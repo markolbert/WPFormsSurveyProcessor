@@ -1,12 +1,6 @@
-﻿using System;
-using Autofac.Core;
-using J4JSoftware.Configuration.CommandLine;
-using J4JSoftware.Configuration.J4JCommandLine;
-using J4JSoftware.DeusEx;
-using J4JSoftware.Logging;
+﻿using J4JSoftware.DeusEx;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog.Events;
 
 namespace WPFormsSurveyProcessor;
 
