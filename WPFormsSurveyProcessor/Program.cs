@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac.Core;
 using J4JSoftware.Configuration.CommandLine;
 using J4JSoftware.Configuration.J4JCommandLine;
 using J4JSoftware.DeusEx;
@@ -22,32 +23,25 @@ internal class Program
             return;
         }
 
-        //var logger = J4JDeusEx.ServiceProvider.GetRequiredService<IJ4JLogger>();
+        var service = GetService();
 
-        //Configuration = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
-        //if( Configuration.Errors != null )
-        //{
-        //    foreach( var error in Configuration.Errors )
-        //    {
-        //        logger.Write( LogEventLevel.Fatal, error );
-        //    }
-
-        //    Environment.ExitCode = 1;
-        //    return;
-        //}
-
-        //if ( Configuration.ShowHelp )
-        //{
-        //    var options = J4JDeusEx.ServiceProvider.GetRequiredService<OptionCollection>();
-        //    var help = new ColorHelpDisplay( new WindowsLexicalElements( logger ), options );
-        //    help.Display();
-
-        //    Environment.ExitCode = 1;
-        //    return;
-        //}
-
-        var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
         var cancellationTokenSrc = new CancellationTokenSource();
-        config.ServiceToRun.StartAsync( cancellationTokenSrc.Token );
+        service.StartAsync( cancellationTokenSrc.Token );
+    }
+
+    private static IHostedService GetService()
+    {
+        var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
+
+        if (config.Errors != null)
+            return J4JDeusEx.ServiceProvider.GetRequiredService<MisconfigurationService>();
+
+        if (config.DisplayFormInfo)
+            return J4JDeusEx.ServiceProvider.GetRequiredService<FormInfoService>();
+
+        if (config.ShowHelp)
+            return J4JDeusEx.ServiceProvider.GetRequiredService<HelpService>();
+
+        return J4JDeusEx.ServiceProvider.GetRequiredService<ParseService>();
     }
 }
