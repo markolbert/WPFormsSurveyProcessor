@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WPFormsSurveyProcessor": {
+      "commandName": "Project",
+      "commandLineArgs": "/h"
+    }
+  }
+}
