@@ -6,18 +6,9 @@ namespace WpFormsSurvey;
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
 public class ResponseBase 
 {
-    public int Id { get; set; }
+    [JsonPropertyName("id")]
+    public int FieldId { get; set; }
 
     [JsonPropertyName("name")]
     public string FieldLabel { get; set; } = string.Empty;
-
-    public Form? Form => Field?.Form;
-    public FieldBase? Field { get; private set; }
-
-    public virtual bool Initialize( FieldBase field )
-    {
-        Field = field;
-
-        return field.Form != null;
-    }
 }

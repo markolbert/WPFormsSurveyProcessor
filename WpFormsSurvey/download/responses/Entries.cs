@@ -1,6 +1,6 @@
 ﻿namespace WpFormsSurvey;
 
-public record Entries( string Name, string Database, List<Entry>? Data )
+public record Entries( string Name, string Database, List<IndividualSubmission>? Data )
 {
     public List<int> FormIds =>
         Data?.Select( x => x.FormId )

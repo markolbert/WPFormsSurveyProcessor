@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class Entry
+public class IndividualSubmission
 {
     [JsonPropertyName("entry_id")]
     public int EntryId { get; set; }
