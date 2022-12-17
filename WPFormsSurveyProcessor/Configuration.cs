@@ -51,23 +51,6 @@ public class Configuration
     public bool DisplayFormInfo { get; set; }
     public bool ShowHelp { get; set; }
 
-    public IHostedService ServiceToRun
-    {
-        get
-        {
-            if( Errors != null )
-                return J4JDeusEx.ServiceProvider.GetRequiredService<MisconfigurationService>();
-
-            if ( DisplayFormInfo )
-                return J4JDeusEx.ServiceProvider.GetRequiredService<FormInfoService>();
-
-            if( ShowHelp)
-                return J4JDeusEx.ServiceProvider.GetRequiredService<HelpService>();
-
-            return J4JDeusEx.ServiceProvider.GetRequiredService<ParseService>();
-        }
-    }
-
     public List<string>? Errors
     {
         get
