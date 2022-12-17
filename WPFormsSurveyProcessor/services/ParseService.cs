@@ -12,17 +12,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace WPFormsSurveyProcessor;
 
-internal class ParseService : IHostedService
+internal class ParseService : ServiceBase
 {
-    public Task StartAsync( CancellationToken cancellationToken )
+    public ParseService(
+        Configuration config,
+        IJ4JLogger logger
+    )
+        : base(config, logger)
     {
-        var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
-        var logger = J4JDeusEx.ServiceProvider.GetRequiredService<IJ4JLogger>();
-
-        logger.Warning( "{0} not implemented", GetType() );
-
-        return Task.CompletedTask;
     }
-
-    public Task StopAsync( CancellationToken cancellationToken ) => Task.CompletedTask;
 }

@@ -13,25 +13,28 @@ using Serilog.Events;
 
 namespace WPFormsSurveyProcessor;
 
-internal class MisconfigurationService : IHostedService
+internal class MisconfigurationService : ServiceBase
 {
-    public Task StartAsync( CancellationToken cancellationToken )
+    public MisconfigurationService(
+        Configuration config,
+        IJ4JLogger logger
+    )
+        : base(config, logger)
     {
-        var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
-        var logger = J4JDeusEx.ServiceProvider.GetRequiredService<IJ4JLogger>();
+    }
 
-        if( config.Errors == null )
+    public override Task StartAsync( CancellationToken cancellationToken )
+    {
+        if( Configuration.Errors == null )
             return Task.CompletedTask;
 
-        foreach (var error in config.Errors)
+        foreach (var error in Configuration.Errors)
         {
-            logger.Write(LogEventLevel.Fatal, error);
+            Logger.Write(LogEventLevel.Fatal, error);
         }
 
         Environment.ExitCode = 1;
 
         return Task.CompletedTask;
     }
-
-    public Task StopAsync( CancellationToken cancellationToken ) => Task.CompletedTask;
 }

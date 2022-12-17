@@ -12,19 +12,25 @@ using Microsoft.Extensions.Hosting;
 
 namespace WPFormsSurveyProcessor;
 
-internal class HelpService : IHostedService
+internal class HelpService : ServiceBase
 {
-    public Task StartAsync( CancellationToken cancellationToken )
-    {
-        var options = J4JDeusEx.ServiceProvider.GetRequiredService<OptionCollection>();
-        var logger = J4JDeusEx.ServiceProvider.GetRequiredService<IJ4JLogger>();
+    private readonly OptionCollection _options;
 
-        var help = new ColorHelpDisplay(new WindowsLexicalElements(logger), options);
-        
+    public HelpService(
+        Configuration config,
+        OptionCollection options,
+        IJ4JLogger logger
+    )
+        : base(config, logger)
+    {
+        _options = options;
+    }
+
+    public override Task StartAsync( CancellationToken cancellationToken )
+    {
+        var help = new ColorHelpDisplay(new WindowsLexicalElements(Logger), _options);
         help.Display();
 
         return Task.CompletedTask;
     }
-
-    public Task StopAsync( CancellationToken cancellationToken ) => Task.CompletedTask;
 }
