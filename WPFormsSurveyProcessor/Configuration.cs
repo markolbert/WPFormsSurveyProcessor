@@ -38,6 +38,8 @@ public class Configuration
 
     public FileStatus EntriesFileStatus { get; private set; } = FileStatus.Undefined;
 
+    public string ExcelFilePath { get; set; } = "WpForms.xlsx";
+
     public List<int> FormIds { get; set; } = new();
     public bool DisplayFormInfo { get; set; }
     public bool ShowHelp { get; set; }
