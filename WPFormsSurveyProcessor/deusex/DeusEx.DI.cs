@@ -36,5 +36,9 @@ internal partial class DeusEx
         builder.RegisterType<FormInfoService>()
                .AsSelf()
                .SingleInstance();
+
+        builder.RegisterType<ExportFormInfo>()
+               .AsSelf()
+               .SingleInstance();
     }
 }
