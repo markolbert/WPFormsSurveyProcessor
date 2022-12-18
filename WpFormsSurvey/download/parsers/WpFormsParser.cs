@@ -11,7 +11,6 @@ public class WpFormsParser : WpParserBase<FieldBase>
     )
     : base(logger)
     {
-        RegisterEntityTypes(GetType().Assembly);
     }
 
     public FormsDownload? ParseFile(string filePath)
@@ -94,9 +93,9 @@ public class WpFormsParser : WpParserBase<FieldBase>
             // have it as a JsonObject. We need to accomodate both
             var fieldDefEnumerator = fieldsContent!.Fields.ValueKind switch
             {
-                JsonValueKind.Array => EnumerateFieldsArray(fieldsContent.Fields, options),
-                JsonValueKind.Object => EnumerateFieldsObject(fieldsContent.Fields, options),
-                _ => UnsupportedEnumerator(fieldsContent.Fields.ValueKind)
+                JsonValueKind.Array => EnumerateFieldsArray( fieldsContent.Fields, options ),
+                JsonValueKind.Object => EnumerateFieldsObject( fieldsContent.Fields, options ),
+                _ => UnsupportedEnumerator( fieldsContent.Fields.ValueKind )
             };
 
             foreach (var fieldDef in fieldDefEnumerator)

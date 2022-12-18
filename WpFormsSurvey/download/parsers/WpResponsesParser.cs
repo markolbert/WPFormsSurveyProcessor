@@ -16,7 +16,6 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
     )
         : base( logger )
     {
-        RegisterEntityTypes( GetType().Assembly );
     }
 
     public Responses? ParseFile( string filePath )
