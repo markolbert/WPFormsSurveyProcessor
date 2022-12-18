@@ -2,7 +2,7 @@
   "profiles": {
     "WPFormsSurveyProcessor": {
       "commandName": "Project",
-      "commandLineArgs": "/d /p \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\wp_posts.json\" /e \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\wp_wpforms_entries.json\""
+      "commandLineArgs": "/p \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\wp_posts.json\" /e \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\wp_wpforms_entries.json\""
     }
   }
 }
