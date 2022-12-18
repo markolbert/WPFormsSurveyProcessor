@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Options;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace WpFormsSurvey;
@@ -7,7 +8,11 @@ namespace WpFormsSurvey;
 [WpFormsFieldType("radio")]
 public class ChoicesField : FieldBase
 {
-    private readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
+    private static JsonSerializerOptions _options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString
+    };
 
     [JsonPropertyName("choices")]
     public JsonElement RawChoices { get; set; }
@@ -20,20 +25,22 @@ public class ChoicesField : FieldBase
         if( !base.Initialize( formDef ) )
             return false;
 
-        // choices are stored as JSON objects with invalid C# names
-        // (they're the choice's index).
-        if( RawChoices.ValueKind != JsonValueKind.Object )
-            return false;
+        // for some strange reason, some WpForms forms have the Fields object as a JsonArray, and some 
+        // have it as a JsonObject. We need to accomodate both
+        var fieldDefEnumerator = RawChoices.ValueKind switch
+        {
+            JsonValueKind.Array => EnumerateFieldsArray<FieldChoice>(RawChoices, _options),
+            JsonValueKind.Object => EnumerateFieldsObject<FieldChoice>( RawChoices, _options ),
+            _ => UnsupportedEnumerator<FieldChoice>(RawChoices.ValueKind)
+        };
 
         var retVal = true;
 
-        foreach( var choice in RawChoices.EnumerateObject() )
+        foreach( var choice in fieldDefEnumerator )
         {
-            var temp = JsonSerializer.Deserialize<FieldChoice>( choice.Value.GetRawText(), _options );
-
-            if( temp == null )
+            if( choice == null )
                 retVal = false;
-            else Choices.Add( temp );
+            else Choices.Add( choice );
         }
 
         return retVal;
