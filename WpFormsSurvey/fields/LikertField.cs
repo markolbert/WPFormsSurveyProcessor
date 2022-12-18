@@ -4,7 +4,7 @@ using J4JSoftware.Logging;
 
 namespace WpFormsSurvey;
 
-[WpFormsFieldType("likert-scale")]
+[WpFormsFieldType("likert_scale")]
 public class LikertField : TextField
 {
     [JsonPropertyName("single_row")]
