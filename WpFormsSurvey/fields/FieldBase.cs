@@ -1,12 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using Serilog.Core;
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class FieldBase
+public class FieldBase : JsonField
 {
+    protected FieldBase()
+    {
+    }
+
     public Form? Form { get; private set; }
 
     public virtual bool Initialize( Form formDef )

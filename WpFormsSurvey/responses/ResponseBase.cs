@@ -4,8 +4,12 @@ using System.Text.Json.Serialization;
 namespace WpFormsSurvey;
 
 [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-public class ResponseBase 
+public class ResponseBase : JsonField
 {
+    protected ResponseBase()
+    {
+    }
+
     [JsonPropertyName("id")]
     public int FieldId { get; set; }
 
