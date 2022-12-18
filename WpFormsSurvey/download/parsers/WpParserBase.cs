@@ -77,17 +77,20 @@ public class WpParserBase<TEntity>
 
     private bool RegisterFieldInternal(Type entityType)
     {
-        var attributes = entityType.GetCustomAttributes<WpFormsFieldTypeAttribute>( false )
-                                   .ToList();
-        if (!attributes.Any())
-        {
-            Logger.Error("{0} is not decorated with any WpFormsFieldTypeAttributes", entityType);
+        if( entityType == typeof( TEntity ) )
             return false;
-        }
 
         if (entityType.GetConstructor(Type.EmptyTypes) == null)
         {
             Logger.Error("{0} does not have a public parameterless constructor", entityType);
+            return false;
+        }
+
+        var attributes = entityType.GetCustomAttributes<WpFormsFieldTypeAttribute>(false)
+                                   .ToList();
+        if (!attributes.Any())
+        {
+            Logger.Error("{0} is not decorated with any WpFormsFieldTypeAttributes", entityType);
             return false;
         }
 
