@@ -112,13 +112,13 @@ internal class ParseService : ServiceBase
         if( !ExportFormInfo( workbook, formDefinitions ) )
             return Task.CompletedTask;
 
-        if( !ExportChoiceFields( workbook, formDefinitions ) )
-            return Task.CompletedTask;
-
         if (!ExportFieldDescriptions(workbook, formDefinitions))
             return Task.CompletedTask;
 
-        if( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, responsesDownload.Data)))
+        if (!ExportChoiceFields(workbook, formDefinitions))
+            return Task.CompletedTask;
+
+        if ( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, responsesDownload.Data)))
             return Task.CompletedTask;
 
         try
