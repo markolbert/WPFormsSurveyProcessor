@@ -6,7 +6,7 @@ namespace WpFormsSurvey;
 
 [WpFormsFieldType("select")]
 [WpFormsFieldType("radio")]
-public class ChoicesField : FieldBase
+public class ChoicesField : LabeledField
 {
     private static JsonSerializerOptions _options = new JsonSerializerOptions
     {
@@ -29,8 +29,8 @@ public class ChoicesField : FieldBase
         // have it as a JsonObject. We need to accomodate both
         var fieldDefEnumerator = RawChoices.ValueKind switch
         {
-            JsonValueKind.Array => EnumerateFieldsArray<FieldChoice>(RawChoices, _options),
-            JsonValueKind.Object => EnumerateFieldsObject<FieldChoice>( RawChoices, _options ),
+            JsonValueKind.Array => EnumerateArray<FieldChoice>(RawChoices, _options),
+            JsonValueKind.Object => EnumerateObject<FieldChoice>( RawChoices, _options ),
             _ => UnsupportedEnumerator<FieldChoice>(RawChoices.ValueKind)
         };
 

@@ -3,7 +3,7 @@
 namespace WpFormsSurvey;
 
 [WpFormsFieldType("file-upload")]
-public class FileUploadField : TextField
+public class FileUploadField : LabeledField
 {
     [ JsonPropertyName( "extensions" ) ]
     public string Extensions { get; set; } = string.Empty;

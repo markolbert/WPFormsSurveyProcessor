@@ -7,7 +7,6 @@ namespace WpFormsSurvey;
 [WpFormsFieldType("email")]
 [WpFormsFieldType("divider")]
 [WpFormsFieldType("password")]
-public class TextField : FieldBase
+public class TextField : LabeledField
 {
-    public string Label { get; set; } = string.Empty;
 }
