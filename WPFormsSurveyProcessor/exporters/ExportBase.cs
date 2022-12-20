@@ -361,6 +361,10 @@ public abstract class ExportBase<TEntity>
                 CurrentCell.SetCellValue( dtValue );
                 break;
 
+            case decimal decimalValue:
+                CurrentCell.SetCellValue( Convert.ToDouble(decimalValue) );
+                break;
+
             default:
                 Logger.Error( "Unsupported value type '{0}'", typeof( T ) );
                 break;
