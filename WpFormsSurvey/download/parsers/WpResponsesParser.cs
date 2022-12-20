@@ -117,7 +117,16 @@ public class WpResponsesParser : WpParserBase<ResponseBase>
 
                 if( newResponse == null )
                     Logger.Error<string>( "Failed to parse survey response, type '{0}'", responseText );
-                else responseDef.Responses.Add( newResponse );
+                else
+                {
+                    if( newResponse.Initialize() )
+                        responseDef.Responses.Add( newResponse );
+                    else
+                        Logger.Error( "Response for field {0} on form {1} for user Id {2} failed to initialize",
+                                      newResponse.FieldId,
+                                      responseDef.FormId,
+                                      responseDef.UserId );
+                }
             }
         }
     }
