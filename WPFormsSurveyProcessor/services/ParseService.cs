@@ -121,12 +121,17 @@ internal class ParseService : ServiceBase
         if( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, responsesDownload.Data)))
             return Task.CompletedTask;
 
-        using ( var fileStream = File.Create( Configuration.ExcelFilePath ) )
+        try
         {
-            Logger.Information<string>("Writing results to {0}", fileStream.Name);
+            using var fileStream = File.Create( Configuration.ExcelFilePath );
+            Logger.Information<string>( "Writing results to {0}", fileStream.Name );
 
-            workbook.Write(fileStream);
+            workbook.Write( fileStream );
             fileStream.Close();
+        }
+        catch( IOException ioException )
+        {
+            Logger.Error( ioException.Message );
         }
 
         return Task.CompletedTask;
