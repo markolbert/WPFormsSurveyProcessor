@@ -1,4 +1,6 @@
 ﻿using J4JSoftware.Logging;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WpFormsSurvey;
 
@@ -51,6 +53,9 @@ internal class ExportFormInfo : ExportBase<FormInfo>
     protected override bool FinishExport()
     {
         AutoSizeColumns();
+
+        CreateWorksheetNamedRange( "FormIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _ );
+        CreateWorksheetNamedRange("FormNames", $"{SheetName}!$A$2:$B${RecordNumber + 1}", out _);
 
         Logger.Information("    ...done");
         return true;

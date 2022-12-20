@@ -56,6 +56,11 @@ internal class ExportChoiceFields : ExportBase<ChoiceFieldInfo>
     {
         AutoSizeColumns();
 
+        CreateWorksheetNamedRange("FormIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("FieldIds", $"{SheetName}!$B$2:$B${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("ChoiceIds", $"{SheetName}!$C$2:$C${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("Choices", $"{SheetName}!$A$2:$D${RecordNumber + 1}", out _);
+
         Logger.Information("    ...done");
         return true;
     }

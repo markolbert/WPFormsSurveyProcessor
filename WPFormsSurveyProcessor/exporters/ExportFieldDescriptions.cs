@@ -56,6 +56,10 @@ internal class ExportFieldDescriptions : ExportBase<FieldDescription>
     {
         AutoSizeColumns();
 
+        CreateWorksheetNamedRange("FormIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("FieldIds", $"{SheetName}!$B$2:$B${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("Fields", $"{SheetName}!$A$2:$D${RecordNumber + 1}", out _);
+
         Logger.Information("    ...done");
         return true;
     }

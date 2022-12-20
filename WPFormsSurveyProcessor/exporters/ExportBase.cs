@@ -1,6 +1,7 @@
 ﻿using J4JSoftware.Logging;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 
 namespace WPFormsSurveyProcessor;
 
@@ -60,6 +61,8 @@ public abstract class ExportBase<TEntity>
 
     protected virtual bool Initialize( IWorkbook workbook, string sheetName )
     {
+        Workbook = workbook;
+
         Worksheet = workbook.GetSheet( sheetName );
         if( Worksheet != null )
         {
@@ -76,6 +79,8 @@ public abstract class ExportBase<TEntity>
         return false;
     }
 
+    public IWorkbook? Workbook { get; private set; }
+
     public ISheet? Worksheet
     {
         get => _worksheet;
@@ -90,6 +95,7 @@ public abstract class ExportBase<TEntity>
     }
 
     public string? SheetName => Worksheet?.SheetName;
+    public int SheetIndex => Workbook?.GetSheetIndex( SheetName ) ?? -1;
     public CustomStyles? Styles { get; set; }
 
     public virtual bool Initialized => Worksheet != null;
@@ -371,6 +377,49 @@ public abstract class ExportBase<TEntity>
         }
 
         ApplyStyle( style );
+    }
+
+    protected bool CreateWorksheetNamedRange( string name, string rangeFormula, out IName? result ) =>
+        CreateNamedRange( name, rangeFormula, SheetIndex, out result );
+
+    protected bool CreateWorkbookNamedRange(string name, string rangeFormula, out IName? result) =>
+        CreateNamedRange(name, rangeFormula, -1, out result);
+
+    private bool CreateNamedRange( string name, string rangeFormula, int sheetIndex, out IName? result )
+    {
+        result = null;
+
+        if ( !Initialized )
+        {
+            Logger.Error("Exporter is not initialized, cannot create worksheet named range"  );
+            return false;
+        }
+
+        foreach( var existingRange in Workbook!.GetNames( name ) )
+        {
+            if( existingRange.SheetIndex != SheetIndex )
+                continue;
+
+            Logger.Error<string, string>($"Named range {0}!{1} already exists", SheetName!, name);
+            return false;
+        }
+
+        try
+        {
+            result = Workbook!.CreateName();
+            result.NameName = name;
+            result.RefersToFormula = rangeFormula;
+
+            if (sheetIndex >= 0)
+                result.SheetIndex = SheetIndex;
+        }
+        catch ( Exception ex )
+        {
+            Logger.Error<string, string>("Failed to create named range '{0}', message was {1}", name, ex.Message  );
+            result = null;
+        }
+
+        return result != null;
     }
 
     protected virtual bool StartExport() => true;
