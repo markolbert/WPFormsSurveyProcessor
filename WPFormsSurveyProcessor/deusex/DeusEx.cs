@@ -16,7 +16,6 @@ internal partial class DeusEx : J4JDeusExHosted
                         .Publisher( "Jump for Joy Software" )
                         .LoggerInitializer( ConfigureLogging )
                         .AddDependencyInjectionInitializers( ConfigureDependencyInjection )
-                        .AddServicesInitializers(ConfigureServices)
                         .FilePathTrimmer( FilePathTrimmer );
 
         var cmdLineConfig = hostConfig.AddCommandLineProcessing( CommandLineOperatingSystems.Windows )
