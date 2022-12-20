@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using J4JSoftware.Logging;
+using NPOI.OpenXmlFormats.Wordprocessing;
 using NPOI.SS.UserModel;
 using WpFormsSurvey;
 
@@ -38,6 +39,7 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
         SetCellValue("Date");
         SetCellValue("Form Id");
         SetCellValue("Field Id");
+        SetCellValue("Field Type");
         SetCellValue("Subfield Id");
         SetCellValue("Response Index");
         SetCellValue("Response");
@@ -54,6 +56,7 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
         SetCellValue(entity.Submitted);
         SetCellValue(entity.FormId);
         SetCellValue(entity.FieldId);
+        SetCellValue(entity.FieldType);
 
         var response = entity.GetResponse();
 
@@ -74,25 +77,25 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
 
             case LikertResponseInfo likertResponseInfo:
                 SetCellValue(likertResponseInfo.SubFieldId);
+                SetCellValue(likertResponseInfo.ResponseIndex);
                 SetCellValue(likertResponseInfo.Response);
-                SetCellValue(likertResponseInfo.Response);
 
                 break;
 
-            case UserFieldResponse<string> textResponse:
+            case string textResponse:
                 MoveColumns(2);
-                SetCellValue(textResponse.Response);
+                SetCellValue(textResponse);
                 break;
 
-            case UserFieldResponse<DateTime> dtResponse:
+            case DateTime dtResponse:
                 MoveColumns(2);
-                SetCellValue(dtResponse.Response);
+                SetCellValue(dtResponse);
 
                 break;
 
-            case UserFieldResponse<decimal> numResponse:
+            case decimal numResponse:
                 MoveColumns(2);
-                SetCellValue(numResponse.Response);
+                SetCellValue(numResponse);
 
                 break;
         }
@@ -154,194 +157,16 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
 
             foreach( var curResponse in submission.Responses )
             {
-                var curField = curForm.Fields
-                                       .FirstOrDefault( x => x.Id == curResponse.FieldId );
+                var responseExport = curResponse.GetResponseExport( curForm, submission, curResponse.FieldId );
 
-                if( curField == null )
+                if( !responseExport.IsValid )
+                    Logger.Error( responseExport.Error! );
+
+                foreach( var item in responseExport.Responses )
                 {
-                    Logger.Error( "Could not locate field {0} in form {1}", curResponse.FieldId, curForm.Id );
-                    continue;
-                }
-
-                var enumerator = curField switch
-                {
-                    ChoicesField choicesField => ProcessChoicesField( submission, choicesField, curResponse ),
-                    LikertField likertField => curResponse is LikertResponse likertResponse
-                        ? ProcessLikertField( submission, likertField, likertResponse )
-                        : null,
-                    FormattedField formattedField => ProcessFormattedField( submission, formattedField, curResponse ),
-                    NumberSliderField numSliderField => ProcessNumberSliderField(submission, numSliderField, curResponse ),
-                    FileUploadField fileUploadField => ProcessFileUploadField(submission, fileUploadField, curResponse ),
-                    TextField textField => ProcessTextField(submission, textField, curResponse ),
-                    _ => null
-                };
-
-                if( enumerator == null )
-                {
-                    Logger.Error( "Could not process user {0} response for {1} field {2} in form {3} (id {4})",
-                                  new object[]
-                                  {
-                                      submission.UserId,
-                                      curField.GetType(),
-                                      curResponse.FieldId,
-                                      curForm.Id,
-                                      curForm.PostTitle
-                                  } );
-                    continue;
-                }
-
-                foreach( var response in enumerator )
-                {
-                    if( response == null )
-                        Logger.Error(
-                            "Parsed response is null/undefined for user {0} response for {1} field {2} in form {3} (id {4})",
-                            new object[]
-                            {
-                                submission.UserId,
-                                curField.GetType(),
-                                curResponse.FieldId,
-                                curForm.Id,
-                                curForm.PostTitle
-                            } );
-                    else yield return response;
-
+                    yield return item;
                 }
             }
         }
-    }
-
-    private IEnumerable<IUserFieldResponse?> ProcessChoicesField(
-        IndividualSubmission submission,
-        ChoicesField choicesField,
-        ResponseBase curResponse
-    )
-    {
-        var responses = new List<string>();
-
-        switch (curResponse)
-        {
-            case MultipleTextResponse multipleTextResponse:
-                responses.AddRange(multipleTextResponse.Values);
-                break;
-
-            case TextResponse textResponse:
-                responses.Add(textResponse.Value);
-                break;
-        }
-
-        foreach (var response in responses)
-        {
-            var responseInfo = new IndexedResponseInfo( curResponse.FieldLabel,
-                                                        choicesField.Choices.FindIndex(
-                                                            x => x.Label.Equals(
-                                                                response,
-                                                                StringComparison.OrdinalIgnoreCase ) ) );
-
-            yield return new UserFieldResponse<IndexedResponseInfo>( submission.UserId,
-                                                                     submission.FormId,
-                                                                     submission.IpAddress,
-                                                                     submission.Date,
-                                                                     curResponse.FieldId,
-                                                                     responseInfo );
-        }
-    }
-
-    private IEnumerable<IUserFieldResponse?> ProcessLikertField(
-        IndividualSubmission submission,
-        LikertField likertField,
-        LikertResponse likertResponse
-    )
-    {
-        foreach( var likertScore in likertResponse.Scores )
-        {
-            var responseInfo = new LikertResponseInfo( likertScore.Column,
-                                                       likertField.Columns[ likertScore.Column - 1 ],
-                                                       likertScore.Column );
-
-            yield return new UserFieldResponse<LikertResponseInfo>( submission.UserId,
-                                                                    submission.FormId,
-                                                                    submission.IpAddress,
-                                                                    submission.Date,
-                                                                    likertField.Id,
-                                                                    responseInfo );
-        }
-    }
-
-    private IEnumerable<IUserFieldResponse?> ProcessFormattedField(
-        IndividualSubmission submission,
-        FormattedField formattedField,
-        ResponseBase curResponse
-    )
-    {
-        yield return curResponse switch
-        {
-            NameResponse nameResponse => new UserFieldResponse<NameResponseInfo>( submission.UserId,
-                submission.FormId,
-                submission.IpAddress,
-                submission.Date,
-                formattedField.Id,
-                new NameResponseInfo( nameResponse ) ),
-            TextResponse textResponse => new UserFieldResponse<string>( submission.UserId,
-                                                                        submission.FormId,
-                                                                        submission.IpAddress,
-                                                                        submission.Date,
-                                                                        formattedField.Id,
-                                                                        textResponse.Value ),
-            _ => null
-        };
-    }
-
-    private IEnumerable<IUserFieldResponse?> ProcessTextField(
-        IndividualSubmission submission,
-        TextField textField,
-        ResponseBase curResponse
-    )
-    {
-        yield return curResponse switch
-        {
-            TextResponse textResponse => new UserFieldResponse<string>(submission.UserId,
-                                                                       submission.FormId,
-                                                                       submission.IpAddress,
-                                                                       submission.Date,
-                                                                       textField.Id,
-                                                                       textResponse.Value),
-            _ => null
-        };
-    }
-
-    private IEnumerable<IUserFieldResponse?> ProcessNumberSliderField(
-        IndividualSubmission submission,
-        NumberSliderField numSliderField,
-        ResponseBase curResponse
-    )
-    {
-        yield return curResponse switch
-        {
-            NumericResponse numResponse => new UserFieldResponse<decimal>(submission.UserId,
-                                                                       submission.FormId,
-                                                                       submission.IpAddress,
-                                                                       submission.Date,
-                                                                       numSliderField.Id,
-                                                                       numResponse.Value),
-            _ => null
-        };
-    }
-
-    private IEnumerable<IUserFieldResponse?> ProcessFileUploadField(
-        IndividualSubmission submission,
-        FileUploadField numSliderField,
-        ResponseBase curResponse
-    )
-    {
-        yield return curResponse switch
-        {
-            TextResponse textResponse => new UserFieldResponse<string>(submission.UserId,
-                                                                          submission.FormId,
-                                                                          submission.IpAddress,
-                                                                          submission.Date,
-                                                                          numSliderField.Id,
-                                                                          textResponse.Value),
-            _ => null
-        };
     }
 }
