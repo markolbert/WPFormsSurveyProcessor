@@ -1,4 +1,5 @@
-﻿using J4JSoftware.DeusEx;
+﻿using System.Runtime.CompilerServices;
+using J4JSoftware.DeusEx;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,29 +10,57 @@ namespace WPFormsSurveyProcessor;
 
 internal class ParseService : ServiceBase
 {
+    private readonly WpFormsParser _formsParser;
+    private readonly WpResponsesParser _responsesParser;
     private readonly ExportFormInfo _formInfoExporter;
+    private readonly ExportChoiceFields _choiceFieldsExporter;
+    private readonly ExportFieldDescriptions _fieldDescriptionsExporter;
+    private readonly ExportSubmissions _submissionsExporter;
 
     public ParseService(
         Configuration config,
+        WpFormsParser formsParser,
+        WpResponsesParser responsesParser,
         ExportFormInfo formInfoExporter,
+        ExportChoiceFields choiceFieldsExporter,
+        ExportFieldDescriptions fieldDescriptionsExporter,
+        ExportSubmissions submissionsExporter,
         IJ4JLogger logger
     )
         : base(config, logger)
     {
+        _formsParser = formsParser;
+        _responsesParser = responsesParser;
+
         _formInfoExporter = formInfoExporter;
+        _choiceFieldsExporter = choiceFieldsExporter;
+        _fieldDescriptionsExporter = fieldDescriptionsExporter;
+        _submissionsExporter = submissionsExporter;
 
         ValidateExcelFilePath();
     }
 
     private void ValidateExcelFilePath()
     {
-        if( Path.GetInvalidPathChars().Length != 0 )
+        var excelDir = Path.GetDirectoryName( Configuration.ExcelFilePath );
+        if( !string.IsNullOrEmpty(excelDir  ) && excelDir.Intersect(Path.GetInvalidPathChars()).Any())
         {
             Logger.Warning<string>(
-                "Excel output file path '{0}' contains invalid characters, changing output file to ExcelOutput.xlsx in the current directory",
-                Configuration.ExcelFilePath );
+                "Excel output directory '{0}' contains invalid characters, changing output file to ExcelOutput.xlsx in the current directory",
+                excelDir );
 
             Configuration.ExcelFilePath = Path.Combine( Environment.CurrentDirectory, "ExcelOutput.xlsx" );
+            return;
+        }
+
+        var excelFile = Path.GetFileNameWithoutExtension(Configuration.ExcelFilePath);
+        if (!string.IsNullOrEmpty(excelFile) && excelFile.Intersect(Path.GetInvalidFileNameChars()).Any())
+        {
+            Logger.Warning<string>(
+                "Excel output file name '{0}' contains invalid characters, changing output file to ExcelOutput.xlsx in the current directory",
+                excelFile);
+
+            Configuration.ExcelFilePath = Path.Combine(Environment.CurrentDirectory, "ExcelOutput.xlsx");
             return;
         }
 
@@ -50,11 +79,12 @@ internal class ParseService : ServiceBase
 
         try
         {
-            using( File.Create( testFile ) )
-            {
-                File.Delete( testFile );
-                canCreate = true;
-            }
+            using var fs = File.Create( testFile );
+
+            fs.Close();
+            File.Delete( testFile );
+            
+            canCreate = true;
         }
         // ReSharper disable once EmptyGeneralCatchClause
         catch
@@ -64,34 +94,107 @@ internal class ParseService : ServiceBase
         if( canCreate )
             return;
 
-        Logger.Warning( "{0} is inaccessible, changing output file to ExcelOutput.xlsx in the current directory" );
+        Logger.Warning<string>(
+            "{0} is inaccessible, changing output file to ExcelOutput.xlsx in the current directory",
+            Configuration.ExcelFilePath );
 
         Configuration.ExcelFilePath = Path.Combine( Environment.CurrentDirectory, "ExcelOutput.xlsx" );
     }
 
     public override Task StartAsync( CancellationToken cancellationToken )
     {
-        var parser = J4JDeusEx.ServiceProvider.GetRequiredService<WpFormsParser>();
-
-        var forms = parser.ParseFile(Configuration.PostsFilePath);
-        if (forms?.Table == null)
-        {
-            Logger.Error("Failed to parse WordPress posts file");
+        var formsDownload = ParseForms();
+        if( formsDownload?.Data is not {} formDefinitions )
             return Task.CompletedTask;
-        }
+
+        var responsesDownload = ParseResponses();
+        if( responsesDownload?.Data is not {} individualSubmissions )
+            return Task.CompletedTask;
 
         var workbook = new XSSFWorkbook(XSSFWorkbookType.XLSX);
 
-        _formInfoExporter.Initialize(workbook, forms.Table);
+        if( !ExportFormInfo( workbook, formDefinitions ) )
+            return Task.CompletedTask;
 
-        _formInfoExporter.ExportData();
+        if( !ExportChoiceFields( workbook, formDefinitions ) )
+            return Task.CompletedTask;
 
-        using( var fileStream = File.Create( Configuration.ExcelFilePath ) )
+        if (!ExportFieldDescriptions(workbook, formDefinitions))
+            return Task.CompletedTask;
+
+        if( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, responsesDownload.Data)))
+            return Task.CompletedTask;
+
+        using ( var fileStream = File.Create( Configuration.ExcelFilePath ) )
         {
+            Logger.Information<string>("Writing results to {0}", fileStream.Name);
+
             workbook.Write(fileStream);
             fileStream.Close();
         }
 
         return Task.CompletedTask;
     }
+
+    private Forms? ParseForms()
+    {
+        var retVal = _formsParser.ParseFile(Configuration.PostsFilePath);
+        if( retVal?.Table != null )
+            return retVal.Table;
+
+        Logger.Error("Failed to parse WordPress posts file");
+        return null;
+    }
+
+    private Entries? ParseResponses()
+    {
+        var retVal = _responsesParser.ParseFile(Configuration.EntriesFilePath);
+        if (retVal?.Table != null)
+            return retVal.Table;
+
+        Logger.Error("Failed to parse WpForms responses file");
+        return null;
+    }
+
+    private bool ExportFormInfo(XSSFWorkbook workbook, List<Form> formDefinitions)
+    {
+        _formInfoExporter.Initialize(workbook, "form_info", formDefinitions);
+
+        if (_formInfoExporter.Initialized)
+            return _formInfoExporter.ExportData();
+
+        Logger.Error("Failed to initialize form info exporter");
+        return false;
+    }
+
+    private bool ExportChoiceFields(XSSFWorkbook workbook, List<Form> formDefinitions)
+    {
+        _choiceFieldsExporter.Initialize(workbook, "choice_fields", formDefinitions);
+        if (_choiceFieldsExporter.Initialized)
+            return _choiceFieldsExporter.ExportData();
+
+        Logger.Error("Failed to initialize choice fields exporter");
+        return false;
+    }
+
+    private bool ExportFieldDescriptions(XSSFWorkbook workbook, List<Form> formDefinitions)
+    {
+        _fieldDescriptionsExporter.Initialize(workbook, "fields", formDefinitions);
+        if (_fieldDescriptionsExporter.Initialized)
+            return _fieldDescriptionsExporter.ExportData();
+
+        Logger.Error("Failed to initialize field description exporter");
+        return false;
+    }
+
+    private bool ExportSubmissions( XSSFWorkbook workbook, SubmissionInfo submissionInfo )
+    {
+        _submissionsExporter.Initialize(workbook, "responses", submissionInfo);
+        if (_submissionsExporter.Initialized)
+            return _submissionsExporter.ExportData();
+
+        Logger.Error("Failed to initialize submissions exporter");
+        return false;
+    }
+
 }

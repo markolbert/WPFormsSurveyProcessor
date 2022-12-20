@@ -40,5 +40,17 @@ internal partial class DeusEx
         builder.RegisterType<ExportFormInfo>()
                .AsSelf()
                .SingleInstance();
+
+        builder.RegisterType<ExportChoiceFields>()
+               .AsSelf()
+               .SingleInstance();
+
+        builder.RegisterType<ExportFieldDescriptions>()
+               .AsSelf()
+               .SingleInstance();
+
+        builder.RegisterType<ExportSubmissions>()
+               .AsSelf()
+               .SingleInstance();
     }
 }
