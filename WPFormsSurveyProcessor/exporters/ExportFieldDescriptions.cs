@@ -34,6 +34,7 @@ internal class ExportFieldDescriptions : ExportBase<FieldDescription>
     {
         SetCellValue("Form Id", null, 0);
         SetCellValue("Field Id");
+        SetCellValue("Key");
         SetCellValue("Field Type");
         SetCellValue("Field Label");
         MoveRows();
@@ -45,6 +46,7 @@ internal class ExportFieldDescriptions : ExportBase<FieldDescription>
     {
         SetCellValue(entity.FormId, null, 0);
         SetCellValue(entity.FieldId);
+        SetCellValue($"{entity.FormId}:{entity.FieldId}");
         SetCellValue(entity.FieldType);
         SetCellValue(entity.Label);
         MoveRows();

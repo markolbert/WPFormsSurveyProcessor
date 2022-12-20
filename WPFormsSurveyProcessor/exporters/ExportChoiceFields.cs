@@ -35,6 +35,8 @@ internal class ExportChoiceFields : ExportBase<ChoiceFieldInfo>
         SetCellValue("Form Id", null, 0);
         SetCellValue("Field Id");
         SetCellValue("Choice Id");
+        SetCellValue("Field Key");
+        SetCellValue("Choice Key");
         SetCellValue("Choice");
         MoveRows();
 
@@ -46,6 +48,8 @@ internal class ExportChoiceFields : ExportBase<ChoiceFieldInfo>
         SetCellValue(entity.FormId, null, 0);
         SetCellValue(entity.FieldId);
         SetCellValue(entity.ChoiceId);
+        SetCellValue($"{entity.FormId}:{entity.FieldId}");
+        SetCellValue($"{entity.FormId}:{entity.FieldId}:{entity.ChoiceId}");
         SetCellValue(entity.Text);
         MoveRows();
 

@@ -22,6 +22,11 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
 
         _submissionInfo = dataSource;
 
+        Styles = new CustomStyles( Workbook! );
+        var dtStyle = Workbook!.CreateCellStyle();
+        dtStyle.DataFormat = Workbook!.CreateDataFormat().GetFormat( "M/d/yyyy h:mm:ss" );
+        Styles!.Add( new CustomStyles.Style( "Date Submitted", dtStyle ) );
+
         Logger.Information("Beginning export of form submissions");
         return true;
     }
@@ -40,6 +45,8 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
         SetCellValue("Field Id");
         SetCellValue("Field Type");
         SetCellValue("Subfield Id");
+        SetCellValue("Field Key");
+        SetCellValue("Subfield Key");
         SetCellValue("Response Index");
         SetCellValue("Response");
 
@@ -52,7 +59,7 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
     {
         SetCellValue(entity.UserId, null, 0);
         SetCellValue(entity.IpAddress);
-        SetCellValue(entity.Submitted);
+        SetCellValue(entity.Submitted, "Date Submitted");
         SetCellValue(entity.FormId);
         SetCellValue(entity.FieldId);
         SetCellValue(entity.FieldType);
@@ -62,39 +69,41 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
         switch( response )
         {
             case IndexedResponseInfo indexedResponse:
-                MoveColumns();
-                SetCellValue(indexedResponse.ResponseIndex);
+                SetCellValue( $"{entity.FormId}:{entity.FieldId}", null, 2);
+                SetCellValue(indexedResponse.ResponseIndex, null, 2);
                 SetCellValue(indexedResponse.Response);
 
                 break;
 
             case NameResponseInfo nameResponseInfo:
-                MoveColumns(2);
-                SetCellValue(FormatName(nameResponseInfo));
+                SetCellValue($"{entity.FormId}:{entity.FieldId}", null, 2);
+                SetCellValue(FormatName(nameResponseInfo), null, 3);
 
                 break;
 
             case LikertResponseInfo likertResponseInfo:
                 SetCellValue(likertResponseInfo.SubFieldId);
+                SetCellValue($"{entity.FormId}:{entity.FieldId}");
+                SetCellValue($"{entity.FormId}:{entity.FieldId}:{likertResponseInfo.SubFieldId}");
                 SetCellValue(likertResponseInfo.ResponseIndex);
                 SetCellValue(likertResponseInfo.Response);
 
                 break;
 
             case string textResponse:
-                MoveColumns(2);
-                SetCellValue(textResponse);
+                SetCellValue($"{entity.FormId}:{entity.FieldId}", null, 2);
+                SetCellValue(textResponse, null, 3);
                 break;
 
             case DateTime dtResponse:
-                MoveColumns(2);
-                SetCellValue(dtResponse);
+                SetCellValue($"{entity.FormId}:{entity.FieldId}", null, 2);
+                SetCellValue(dtResponse, null, 3);
 
                 break;
 
             case decimal numResponse:
-                MoveColumns(2);
-                SetCellValue(numResponse);
+                SetCellValue($"{entity.FormId}:{entity.FieldId}", null, 2);
+                SetCellValue(numResponse, null, 3);
 
                 break;
         }
