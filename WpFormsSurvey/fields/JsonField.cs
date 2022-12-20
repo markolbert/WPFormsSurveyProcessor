@@ -8,7 +8,7 @@ public class JsonField
     {
     }
 
-    protected IEnumerable<TTarget?> EnumerateFieldsObject<TTarget>(JsonElement container, JsonSerializerOptions options)
+    protected IEnumerable<TTarget?> EnumerateObject<TTarget>(JsonElement container, JsonSerializerOptions options)
     {
         foreach (var fieldObj in container.EnumerateObject())
         {
@@ -18,7 +18,7 @@ public class JsonField
         }
     }
 
-    protected IEnumerable<TTarget?> EnumerateFieldsArray<TTarget>(JsonElement container, JsonSerializerOptions options)
+    protected IEnumerable<TTarget?> EnumerateArray<TTarget>(JsonElement container, JsonSerializerOptions options)
     {
         foreach (var fieldObj in container.EnumerateArray())
         {

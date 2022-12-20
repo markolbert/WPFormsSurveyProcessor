@@ -21,5 +21,6 @@ public class MultipleTextResponse : ResponseBase
         }
     }
 
+    [JsonIgnore]
     public List<string> Values { get; } = new();
 }
