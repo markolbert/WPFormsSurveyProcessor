@@ -1,4 +1,5 @@
-﻿using J4JSoftware.Logging;
+﻿using System.Reflection.Metadata;
+using J4JSoftware.Logging;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 
@@ -7,6 +8,7 @@ namespace WPFormsSurveyProcessor;
 public abstract class ExportBase<TEntity>
     where TEntity : class
 {
+    private ISheet? _worksheet;
     private int _rowNum;
     private IRow? _curRow;
     private int _colNum;
@@ -14,9 +16,12 @@ public abstract class ExportBase<TEntity>
     private int _numCols;
 
     protected ExportBase(
-        IJ4JLogger logger
+        IJ4JLogger logger,
+        int reportingInterval = 500
     )
     {
+        ReportingInterval = reportingInterval <= 0? 500 : reportingInterval;
+
         Logger = logger;
         Logger.SetLoggedType( GetType() );
 
@@ -50,35 +55,45 @@ public abstract class ExportBase<TEntity>
     }
 
     protected IJ4JLogger Logger { get; }
-    protected IWorkbook? Workbook { get; private set; }
-    protected ISheet? Worksheet { get; private set; }
-    protected CustomStyles? Styles { get; private set; }
-    protected int EntityNumber { get; private set; }
+    
+    protected int ReportingInterval { get; }
+    protected int RecordNumber { get; private set; }
 
-    public bool Initialized { get; private set; }
-    public string? SheetName { get; private set; }
-
-    protected virtual void Initialize( IWorkbook workbook, string sheetName )
+    protected virtual bool Initialize( IWorkbook workbook, string sheetName )
     {
-        Workbook = workbook;
-        SheetName = sheetName;
-
-        var worksheet = workbook.GetSheet(SheetName);
-
-        if (worksheet != null)
+        Worksheet = workbook.GetSheet( sheetName );
+        if( Worksheet != null )
         {
-            Logger.Warning<string>("Worksheet '{0}' already exists in workbook, removing it", SheetName);
-
-            var idx = workbook.GetSheetIndex(Worksheet);
-            workbook.RemoveSheetAt(idx);
+            Logger.Warning<string>("Replacing existing spreadsheet '{0}'", sheetName  );
+            var idx = workbook.GetSheetIndex( sheetName );
+            workbook.RemoveSheetAt( idx );
         }
 
-        Worksheet = workbook.CreateSheet(SheetName);
+        Worksheet = workbook.CreateSheet(sheetName);
+        if( Worksheet != null )
+            return true;
 
-        Styles = new CustomStyles( Workbook );
-
-        Initialized = true;
+        Logger.Error<string>("Could not create worksheet '{0}'", sheetName);
+        return false;
     }
+
+    public ISheet? Worksheet
+    {
+        get => _worksheet;
+
+        set
+        {
+            _worksheet = value;
+
+            _rowNum = 0;
+            _colNum = 0;
+        }
+    }
+
+    public string? SheetName => Worksheet?.SheetName;
+    public CustomStyles? Styles { get; set; }
+
+    public virtual bool Initialized => Worksheet != null;
 
     public bool ExportData()
     {
@@ -88,25 +103,31 @@ public abstract class ExportBase<TEntity>
             return false;
         }
 
-        if( !ExportHeader() )
+        if( !StartExport() )
             return false;
 
-        EntityNumber = 0;
+        RecordNumber = 0;
+        var lastReported = 0;
 
-        foreach( var entity in GetEntities() )
+        foreach( var record in GetRecords() )
         {
-            ProcessEntity( entity );
+            ProcessRecord( record );
+            RecordNumber++;
 
-            if( EntityNumber != 0 && EntityNumber % 500 == 0 )
-                Logger.Information( "\t...exported {0:n0} transactions", EntityNumber );
+            if( RecordNumber == 0 || RecordNumber % ReportingInterval != 0 )
+                continue;
 
-            EntityNumber++;
+            ReportProgress();
+            lastReported = RecordNumber;
         }
 
-        Logger.Information("\t...exported {0:n0} transactions", EntityNumber - 1);
+        if( RecordNumber > lastReported)
+            ReportProgress();
 
-        return ExportFooter();
+        return FinishExport();
     }
+
+    protected abstract void ReportProgress();
 
     public int Row
     {
@@ -150,7 +171,7 @@ public abstract class ExportBase<TEntity>
     {
         get
         {
-            if (Worksheet == null)
+            if (!Initialized)
             {
                 Logger.Error("Exporter is not initialized");
                 return null;
@@ -159,7 +180,7 @@ public abstract class ExportBase<TEntity>
             if ( _curRow != null )
                 return _curRow;
 
-            _curRow = Worksheet.GetRow(_rowNum) ?? Worksheet.CreateRow(_rowNum);
+            _curRow = Worksheet!.GetRow(_rowNum) ?? Worksheet.CreateRow(_rowNum);
 
             return _curRow;
         }
@@ -169,7 +190,7 @@ public abstract class ExportBase<TEntity>
     {
         get
         {
-            if (Worksheet == null)
+            if (!Initialized)
             {
                 Logger.Error("Exporter is not initialized");
                 return null;
@@ -192,7 +213,7 @@ public abstract class ExportBase<TEntity>
 
     protected void MoveRows( int rows = 1 )
     {
-        if( Worksheet == null )
+        if( !Initialized )
         {
             Logger.Error("Trying to move rows before initializing worksheet");
             return;
@@ -226,7 +247,7 @@ public abstract class ExportBase<TEntity>
 
     protected void AutoSizeColumns( params int[] colNums )
     {
-        if( Worksheet == null )
+        if( !Initialized )
         {
             Logger.Error("Exporter is not initialized");
             return;
@@ -234,13 +255,13 @@ public abstract class ExportBase<TEntity>
 
         foreach( var colNum in colNums )
         {
-            Worksheet.AutoSizeColumn(colNum);
+            Worksheet!.AutoSizeColumn(colNum);
         }
     }
 
     protected void AutoSizeColumns()
     {
-        if (Worksheet == null)
+        if (!Initialized)
         {
             Logger.Error("Exporter is not initialized");
             return;
@@ -248,13 +269,13 @@ public abstract class ExportBase<TEntity>
 
         for (var colNum = 0; colNum <= _numCols; colNum++)
         {
-            Worksheet.AutoSizeColumn(colNum);
+            Worksheet!.AutoSizeColumn(colNum);
         }
     }
 
     protected void MergeCellsHorizontally( int horizontalRange )
     {
-        if (Worksheet == null)
+        if (!Initialized)
         {
             Logger.Error("Exporter is not initialized");
             return;
@@ -271,7 +292,7 @@ public abstract class ExportBase<TEntity>
                                                 CurrentCell.ColumnIndex,
                                                 CurrentCell.ColumnIndex + horizontalRange );
 
-        Worksheet.AddMergedRegion(mergedCells);
+        Worksheet!.AddMergedRegion(mergedCells);
 
         RegionUtil.SetBorderBottom( 2, mergedCells, Worksheet );
     }
@@ -281,7 +302,7 @@ public abstract class ExportBase<TEntity>
         if( string.IsNullOrEmpty( name ) )
             return;
 
-        if (Worksheet == null)
+        if (!Initialized)
         {
             Logger.Error("Exporter is not initialized");
             return;
@@ -300,7 +321,7 @@ public abstract class ExportBase<TEntity>
         CurrentCell.CellStyle = styleInfo.CellStyle;
     }
 
-    protected void SetCellValue<T>( T? value, string? style = null, int colsToMove = 1 )
+    protected void SetCellValue<T>( T? value, string? style = null, int colsToMoveBefore = 1 )
     {
         if( CurrentCell == null )
         {
@@ -308,10 +329,10 @@ public abstract class ExportBase<TEntity>
             return;
         }
 
-        if( colsToMove < 0 )
-            colsToMove = 1;
+        if( colsToMoveBefore < 0 )
+            colsToMoveBefore = 1;
 
-        MoveColumns(colsToMove);
+        MoveColumns(colsToMoveBefore);
 
         if( value == null )
         {
@@ -349,9 +370,9 @@ public abstract class ExportBase<TEntity>
         ApplyStyle( style );
     }
 
-    protected virtual bool ExportHeader() => true;
-    protected virtual bool ExportFooter() => true;
+    protected virtual bool StartExport() => true;
+    protected virtual bool FinishExport() => true;
 
-    protected abstract bool ProcessEntity( TEntity entity );
-    protected abstract IEnumerable<TEntity> GetEntities();
+    protected abstract bool ProcessRecord( TEntity record );
+    protected abstract IEnumerable<TEntity> GetRecords();
 }
