@@ -4,8 +4,6 @@ namespace WpFormsSurvey;
 
 [WpFormsFieldType("text")]
 [WpFormsFieldType("textarea")]
-[WpFormsFieldType("radio")]
-[WpFormsFieldType("select")]
 [WpFormsFieldType("phone")]
 [WpFormsFieldType("email")]
 [WpFormsFieldType("password")]
