@@ -1,8 +1,5 @@
-using System.Dynamic;
 using System.Text;
-using System.Text.Json;
 using FluentAssertions;
-using FluentAssertions.Equivalency.Steps;
 using WpFormsSurvey;
 
 namespace Test.Parsing;
@@ -73,15 +70,6 @@ public class WpFormsTests : TestBase
         forms.Table!.Data.Should().NotBeNull();
         forms.IsValid.Should().BeTrue();
 
-        var sb = new StringBuilder();
-
-        foreach( var formInfo in forms.Table.SummaryInfo )
-        {
-            sb.Append( $"{formInfo.Id}\t{formInfo.Name}\n" );
-        }
-
-        var temp = sb.ToString();
-        
         var responsesParser = new WpResponsesParser(Logger);
         var responses = responsesParser.ParseFile( responsesPath );
 
