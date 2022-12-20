@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "J4JCommandLine", "..\J4JCom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreUtilities", "..\ProgrammingUtilities\EFCoreUtilities\EFCoreUtilities.csproj", "{C68A1C14-0F01-4BB4-A217-A3BCCFA454E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFormsSurveyDb", "WPFormsSurveyDb\WPFormsSurveyDb.csproj", "{A3B6B202-7DF1-4492-9E09-F3283CE24AD5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Parsing", "Test.Parsing\Test.Parsing.csproj", "{09D17800-D911-4D59-99FF-1E782F1BDC8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpFormsSurvey", "WpFormsSurvey\WpFormsSurvey.csproj", "{598C9D5A-4B1D-4B45-ABCB-E41A1F803B26}"
@@ -45,10 +43,6 @@ Global
 		{C68A1C14-0F01-4BB4-A217-A3BCCFA454E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C68A1C14-0F01-4BB4-A217-A3BCCFA454E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C68A1C14-0F01-4BB4-A217-A3BCCFA454E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3B6B202-7DF1-4492-9E09-F3283CE24AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3B6B202-7DF1-4492-9E09-F3283CE24AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3B6B202-7DF1-4492-9E09-F3283CE24AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3B6B202-7DF1-4492-9E09-F3283CE24AD5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09D17800-D911-4D59-99FF-1E782F1BDC8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09D17800-D911-4D59-99FF-1E782F1BDC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09D17800-D911-4D59-99FF-1E782F1BDC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
