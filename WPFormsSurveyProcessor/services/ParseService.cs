@@ -1,5 +1,7 @@
 ﻿using J4JSoftware.Logging;
 using NPOI.XSSF.UserModel;
+using Org.BouncyCastle.Math.EC;
+using Serilog;
 using WpFormsSurvey;
 
 namespace WPFormsSurveyProcessor;
@@ -103,9 +105,35 @@ internal class ParseService : ServiceBase
         if( formsDownload?.Data is not {} formDefinitions )
             return Task.CompletedTask;
 
+        if( Configuration.FormIds.Any() )
+        {
+            formDefinitions = formsDownload.Data
+                                        .Where( x => Configuration.FormIds.Any( y => x.Id == y ) )
+                                        .ToList();
+
+            if( !formDefinitions.Any() )
+            {
+                Logger.Warning("No form(s) with that/those form ids were found");
+                return Task.CompletedTask;
+            }
+        }
+
         var responsesDownload = ParseResponses();
         if( responsesDownload?.Data is not {} individualSubmissions )
             return Task.CompletedTask;
+
+        if (Configuration.FormIds.Any())
+        {
+            individualSubmissions = individualSubmissions
+                                           .Where(x => Configuration.FormIds.Any(y => x.FormId == y))
+                                           .ToList();
+
+            if (!individualSubmissions.Any())
+            {
+                Logger.Warning("No submissions(s) with that/those form ids were found");
+                return Task.CompletedTask;
+            }
+        }
 
         var workbook = new XSSFWorkbook(XSSFWorkbookType.XLSX);
 
@@ -118,7 +146,7 @@ internal class ParseService : ServiceBase
         if (!ExportChoiceFields(workbook, formDefinitions))
             return Task.CompletedTask;
 
-        if ( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, responsesDownload.Data)))
+        if ( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, individualSubmissions)))
             return Task.CompletedTask;
 
         try
