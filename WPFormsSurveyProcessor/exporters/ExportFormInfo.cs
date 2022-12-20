@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using J4JSoftware.Logging;
-using NPOI.SS.UserModel;
+﻿using J4JSoftware.Logging;
 using NPOI.XSSF.UserModel;
 using WpFormsSurvey;
 

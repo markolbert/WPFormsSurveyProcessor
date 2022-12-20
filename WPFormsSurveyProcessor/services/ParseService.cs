@@ -1,8 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using J4JSoftware.DeusEx;
-using J4JSoftware.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using J4JSoftware.Logging;
 using NPOI.XSSF.UserModel;
 using WpFormsSurvey;
 

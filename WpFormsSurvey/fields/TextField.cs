@@ -1,6 +1,4 @@
-﻿using J4JSoftware.Logging;
-
-namespace WpFormsSurvey;
+﻿namespace WpFormsSurvey;
 
 [WpFormsFieldType("text")]
 [WpFormsFieldType("textarea")]

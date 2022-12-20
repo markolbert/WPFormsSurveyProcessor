@@ -1,9 +1,6 @@
-﻿using System.Net;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using J4JSoftware.Logging;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WpFormsSurvey;
 
