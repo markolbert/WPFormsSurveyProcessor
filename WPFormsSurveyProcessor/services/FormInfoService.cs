@@ -47,7 +47,7 @@ internal class FormInfoService : ServiceBase
                                     {
                                         new Cell( "Id" ) { Stroke = headerThickness },
                                         new Cell( "Title" ) { Stroke = headerThickness },
-                                        forms!.Table!.SummaryInfo.Select( x => new[]
+                                        forms!.Table!.ToFormInfo().Select( x => new[]
                                         {
                                             new Cell( x.Id ), new Cell( x.Name )
                                         } )
