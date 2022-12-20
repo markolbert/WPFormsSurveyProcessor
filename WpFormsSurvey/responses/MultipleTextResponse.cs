@@ -3,6 +3,8 @@
 namespace WpFormsSurvey;
 
 [WpFormsFieldType("checkbox")]
+[WpFormsFieldType("radio")]
+[WpFormsFieldType("select")]
 public class MultipleTextResponse : ResponseBase
 {
     private string _rawValue = string.Empty;
@@ -44,7 +46,7 @@ public class MultipleTextResponse : ResponseBase
 
         foreach( var response in Values )
         {
-            var responseInfo = new IndexedResponseInfo( FieldLabel,
+            var responseInfo = new IndexedResponseInfo( response,
                                                         choicesField.Choices.FindIndex( x => x.Label.Equals( response,
                                                             StringComparison.OrdinalIgnoreCase ) ) );
 
