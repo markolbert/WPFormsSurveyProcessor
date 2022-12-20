@@ -54,4 +54,36 @@ public class LikertResponse : ResponseBase
 
         return true;
     }
+
+    public override ResponseExport GetResponseExport( Form form, IndividualSubmission submission, int fieldId )
+    {
+        var retVal = base.GetResponseExport( form, submission, fieldId );
+
+        if( !retVal.IsValid )
+            return retVal;
+
+        if( retVal.Field is not LikertField likertField )
+        {
+            retVal.Error =
+                $"Field associated with user {submission.UserId} response for field {FieldId} in form {form.PostTitle} (id {form.Id}) is not a LikertField";
+            return retVal;
+        }
+
+        foreach( var score in Scores )
+        {
+            var responseInfo = new LikertResponseInfo( score.Row,
+                                                       likertField.Columns[ score.Column - 1 ],
+                                                       score.Column );
+
+            retVal.Responses.Add( new UserFieldResponse<LikertResponseInfo>( submission.UserId,
+                                                                             submission.FormId,
+                                                                             submission.IpAddress,
+                                                                             submission.Date,
+                                                                             FieldId,
+                                                                             retVal.Field.FieldType,
+                                                                             responseInfo ) );
+        }
+
+        return retVal;
+    }
 }
