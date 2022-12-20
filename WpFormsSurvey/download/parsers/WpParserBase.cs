@@ -8,8 +8,15 @@ public class WpParserBase<TEntity>
     where TEntity : class
 {
     protected record FieldDefinition(string Type, string FieldText);
-
     protected record EntityInfo(Type EntityType, MethodInfo DeserializerInfo);
+
+    private enum EntityTypeClass
+    {
+        Invalid,
+        NonPublic,
+        Undecorated,
+        Okay
+    }
 
     protected readonly Dictionary<string, EntityInfo> EntityTypes = new(StringComparer.OrdinalIgnoreCase);
     protected readonly MethodInfo? GenericDeserializer;
@@ -55,7 +62,10 @@ public class WpParserBase<TEntity>
     public bool RegisterEntityType(Type entityType)
     {
         if( entityType.IsAssignableTo( typeof( TEntity ) ) )
-            return RegisterFieldInternal( entityType );
+        {
+            var result = RegisterFieldInternal( entityType );
+            return result is EntityTypeClass.NonPublic or EntityTypeClass.Okay;
+        }
 
         Logger.Error("{0} does not derive from {1}", entityType, typeof(TEntity));
 
@@ -69,21 +79,26 @@ public class WpParserBase<TEntity>
         foreach( var type in assembly.GetTypes()
                                      .Where( x => x.IsAssignableTo( typeof( TEntity ) ) ) )
         {
-            retVal &= RegisterFieldInternal( type );
+            var result = RegisterFieldInternal(type);
+            retVal &= result is EntityTypeClass.NonPublic or EntityTypeClass.Okay;
         }
 
         return retVal;
     }
 
-    private bool RegisterFieldInternal(Type entityType)
+    private EntityTypeClass RegisterFieldInternal(Type entityType)
     {
-        if( entityType == typeof( TEntity ) )
-            return false;
+        var publicParameterless = entityType.GetConstructor( Type.EmptyTypes ) != null;
+        var protectedParameterless =
+            entityType.GetConstructor( BindingFlags.NonPublic | BindingFlags.Instance, Type.EmptyTypes ) != null;
+
+        if( entityType == typeof( TEntity ) || (!publicParameterless && protectedParameterless) )
+            return EntityTypeClass.NonPublic;
 
         if (entityType.GetConstructor(Type.EmptyTypes) == null)
         {
-            Logger.Error("{0} does not have a public parameterless constructor", entityType);
-            return false;
+            Logger.Warning("{0} does not have a public parameterless constructor", entityType);
+            return EntityTypeClass.Invalid;
         }
 
         var attributes = entityType.GetCustomAttributes<WpFormsFieldTypeAttribute>(false)
@@ -91,7 +106,7 @@ public class WpParserBase<TEntity>
         if (!attributes.Any())
         {
             Logger.Error("{0} is not decorated with any WpFormsFieldTypeAttributes", entityType);
-            return false;
+            return EntityTypeClass.Undecorated;
         }
 
         var entityInfo = new EntityInfo(entityType, GenericDeserializer!.MakeGenericMethod(entityType));
@@ -106,7 +121,7 @@ public class WpParserBase<TEntity>
             else EntityTypes.Add(attribute.EntityName, entityInfo);
         }
 
-        return true;
+        return EntityTypeClass.Okay;
     }
 
     protected IEnumerable<FieldDefinition> EnumerateFieldsObject(JsonElement container, JsonSerializerOptions options)
