@@ -15,4 +15,6 @@ public class ResponseBase : JsonField
 
     [JsonPropertyName("name")]
     public string FieldLabel { get; set; } = string.Empty;
+
+    public virtual bool Initialize() => true;
 }
