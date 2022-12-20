@@ -7,6 +7,7 @@ public interface IUserFieldResponse
     string IpAddress { get; }
     DateTime Submitted { get; }
     int FieldId { get; }
+    string FieldType { get; }
 
     object GetResponse();
 }
