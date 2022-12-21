@@ -142,12 +142,12 @@ internal class ExportSubmissions : ExportBase<IUserFieldResponse>
     {
         AutoSizeColumns();
 
-        CreateWorksheetNamedRange("UserIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _);
-        CreateWorksheetNamedRange("IpAddresses", $"{SheetName}!$B$2:$B${RecordNumber + 1}", out _);
-        CreateWorksheetNamedRange("FormIds", $"{SheetName}!$D$2:$D${RecordNumber + 1}", out _);
-        CreateWorksheetNamedRange("FieldIds", $"{SheetName}!$E$2:$E${RecordNumber + 1}", out _);
-        CreateWorksheetNamedRange("SubFieldIds", $"{SheetName}!$G$2:$G${RecordNumber + 1}", out _);
-        CreateWorksheetNamedRange("Responses", $"{SheetName}!$A$2:$I${RecordNumber + 1}", out _);
+        //CreateWorksheetNamedRange("UserIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _);
+        //CreateWorksheetNamedRange("IpAddresses", $"{SheetName}!$B$2:$B${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("FieldKeys", $"{SheetName}!$H$2:$H${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("SubfieldKeys", $"{SheetName}!$I$2:$I${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("ResponseIndices", $"{SheetName}!$J$2:$J${RecordNumber + 1}", out _);
+        CreateWorksheetNamedRange("Responses", $"{SheetName}!$K$2:$K${RecordNumber + 1}", out _);
 
         Logger.Information("    ...done");
         return true;
