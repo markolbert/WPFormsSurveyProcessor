@@ -6,6 +6,9 @@ internal partial class DeusEx
 {
     private void CommandLineConfiguration( OptionCollection options )
     {
+        options.Bind<Configuration, string>(x => x.ConfigurationFilePath, "c", "config")!
+            .SetDescription("path to JSON configuration file");
+
         options.Bind<Configuration, string>( x => x.EntriesFilePath, "e", "entries" )!
                .SetDescription( "path to JSON file containing WpForms entries" );
 
