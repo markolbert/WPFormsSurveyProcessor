@@ -1,6 +1,4 @@
 ﻿using J4JSoftware.Logging;
-using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WpFormsSurvey;
 

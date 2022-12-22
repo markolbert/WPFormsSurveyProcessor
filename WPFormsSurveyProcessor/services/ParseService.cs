@@ -1,7 +1,5 @@
 ﻿using J4JSoftware.Logging;
 using NPOI.XSSF.UserModel;
-using Org.BouncyCastle.Math.EC;
-using Serilog;
 using WpFormsSurvey;
 
 namespace WPFormsSurveyProcessor;
