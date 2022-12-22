@@ -11,6 +11,22 @@ public class Configuration
 
     private string _entriesFilePath = string.Empty;
     private string _postsFilePath = string.Empty;
+    private string _configFilePath = "";
+    private bool _configFilePathIsValid;
+
+    public string ConfigurationFilePath
+    {
+        get => _configFilePath;
+
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+                value = "config.json";
+
+            _configFilePathIsValid = Extensions.ValidateConfigurationFilePath(value, out var result);
+            _configFilePath = _configFilePathIsValid ? result! : value;
+        }
+    }
 
     public string PostsFilePath
     {
@@ -44,12 +60,17 @@ public class Configuration
     public bool DisplayFormInfo { get; set; }
     public bool ShowHelp { get; set; }
 
+    public NamedRangeConfigurations? RangeConfigurations { get; set; }
+
     public List<string>? Errors
     {
         get
         {
             if( ShowHelp )
                 return null;
+
+            if (!_configFilePathIsValid)
+                return new List<string> { "Configuration file path '{0}' is invalid or inaccessible", ConfigurationFilePath };
 
             if( DisplayFormInfo && EntriesFileStatus != FileStatus.Okay && PostsFileStatus != FileStatus.Okay )
                 return new List<string>
