@@ -52,5 +52,8 @@ internal partial class DeusEx
         builder.RegisterType<ExportSubmissions>()
                .AsSelf()
                .SingleInstance();
+
+        builder.RegisterType<NamedRangeConfigurations>()
+               .AsSelf();
     }
 }
