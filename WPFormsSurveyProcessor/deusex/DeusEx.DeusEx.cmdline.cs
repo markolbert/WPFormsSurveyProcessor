@@ -4,7 +4,7 @@ namespace WPFormsSurveyProcessor;
 
 internal partial class DeusEx
 {
-    private void CommandLineConfiguration( OptionCollection options )
+    private void SetCommandLineConfiguration( OptionCollection options )
     {
         options.Bind<Configuration, string>(x => x.ConfigurationFilePath, "c", "config")!
             .SetDescription("path to JSON configuration file");
