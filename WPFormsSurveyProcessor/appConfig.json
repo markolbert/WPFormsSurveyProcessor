@@ -1,0 +1,55 @@
+{
+  "RangeConfigurations": {
+    "Forms": [
+      {
+        "Name": "FormIds",
+        "Context": "Worksheet",
+        "FirstColumn": "A"
+      },
+      {
+        "Name": "FormNames",
+        "Context": "Worksheet",
+        "FirstColumn": "A",
+        "LastColumn": "B"
+      }
+    ],
+    "Fields": [
+      {
+        "Name": "Fields",
+        "Context": "Worksheet",
+        "FirstColumn": "C",
+        "LastColumn": "E"
+      }
+    ],
+    "Choices": [
+      {
+        "Name": "Choices",
+        "Context": "Worksheet",
+        "FirstColumn": "E",
+        "LastColumn": "F"
+      }
+    ],
+    "Submissions": [
+      {
+        "Name": "FieldKeys",
+        "Context": "Worksheet",
+        "FirstColumn": "H"
+      },
+      {
+        "Name": "SubfieldKeys",
+        "Context": "Worksheet",
+        "FirstColumn": "I"
+      },
+      {
+        "Name": "ResponseIndices",
+        "Context": "Worksheet",
+        "FirstColumn": "J"
+      },
+      {
+        "Name": "Responses",
+        "Context": "Worksheet",
+        "FirstColumn": "K"
+      }
+    ]
+  }
+}

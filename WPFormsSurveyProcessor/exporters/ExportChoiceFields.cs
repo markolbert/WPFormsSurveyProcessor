@@ -4,13 +4,14 @@ using WpFormsSurvey;
 
 namespace WPFormsSurveyProcessor;
 
-internal class ExportChoiceFields : ExportBase<ChoiceFieldInfo>
+internal class ExportChoiceFields : ExportSurveyBase<ChoiceFieldInfo>
 {
     private List<Form>? _forms;
 
     public ExportChoiceFields( 
+        Configuration config,
         IJ4JLogger logger )
-        : base( logger )
+        : base( config, logger )
     {
     }
 
@@ -60,10 +61,13 @@ internal class ExportChoiceFields : ExportBase<ChoiceFieldInfo>
     {
         AutoSizeColumns();
 
-        //CreateWorksheetNamedRange("FormIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _);
-        //CreateWorksheetNamedRange("FieldIds", $"{SheetName}!$B$2:$B${RecordNumber + 1}", out _);
-        //CreateWorksheetNamedRange("ChoiceIds", $"{SheetName}!$C$2:$C${RecordNumber + 1}", out _);
-        CreateWorksheetNamedRange("Choices", $"{SheetName}!$E$2:$F${RecordNumber + 1}", out _);
+        if (Configuration.RangeConfigurations?.Choices != null)
+            Worksheet!.CreateWorksheetNamedRanges(Configuration.RangeConfigurations.Choices,
+                                                  RecordNumber + 1,
+                                                  out _,
+                                                  Logger);
+
+        //CreateWorksheetNamedRange("Choices", $"{SheetName}!$E$2:$F${RecordNumber + 1}", out _);
 
         Logger.Information("    ...done");
         return true;
