@@ -23,34 +23,6 @@ public abstract class ExportBase<TEntity>
 
         Logger = logger;
         Logger.SetLoggedType( GetType() );
-
-        //Styles.SetDataFormat("EvenFixed0", "###0_);(###0)");
-        //Styles.SetDataFormat( "EvenAccounting0", "#,##0_);(#,##0)" );
-        //Styles.SetDataFormat("EvenAccounting2", "#,##0.00_);(#,##0.00)");
-        //Styles.SetDataFormat( "EvenPercent0", "#,##0%_);(#,##0%)" );
-        //Styles.SetDataFormat( "EvenShortDate", "mm/dd/yyyy" );
-
-        //Styles.SetDataFormat("OddFixed0", "###0_);(###0)");
-        //Styles.SetDataFormat("OddAccounting0", "#,##0_);(#,##0)");
-        //Styles.SetDataFormat("OddAccounting2", "#,##0.00_);(#,##0.00)");
-        //Styles.SetDataFormat("OddPercent0", "#,##0%_);(#,##0%)");
-        //Styles.SetDataFormat("OddShortDate", "mm/dd/yyyy");
-        //Styles.SetFillForegroundColor("OddFixed0", IndexedColors.PaleBlue);
-        //Styles.SetFillForegroundColor("OddAccounting0", IndexedColors.PaleBlue);
-        //Styles.SetFillForegroundColor( "OddAccounting2", IndexedColors.PaleBlue );
-        //Styles.SetFillForegroundColor("OddPercent0", IndexedColors.PaleBlue);
-        //Styles.SetFillForegroundColor("OddShortDate", IndexedColors.PaleBlue);
-        
-        //Styles.SetBottomBorder( "ColumnHeader", BorderStyle.Medium );
-        //Styles.MakeBold( "ColumnHeader" );
-        //Styles.SetHorizontalAlignment( "ColumnHeader", HorizontalAlignment.Center );
-        //Styles.SetWordWrap( "ColumnHeader" );
-        
-        //Styles.SetFillForegroundColor( "OddRow", IndexedColors.PaleBlue);
-
-        //Styles.SetHorizontalAlignment( "EvenCentered", HorizontalAlignment.Center );
-        //Styles.SetHorizontalAlignment("OddCentered", HorizontalAlignment.Center);
-        //Styles.SetFillForegroundColor("OddCentered", IndexedColors.PaleBlue);
     }
 
     protected IJ4JLogger Logger { get; }
@@ -378,48 +350,49 @@ public abstract class ExportBase<TEntity>
         ApplyStyle( style );
     }
 
-    protected bool CreateWorksheetNamedRange( string name, string rangeFormula, out IName? result ) =>
-        CreateNamedRange( name, rangeFormula, SheetIndex, out result );
+    //protected bool CreateWorksheetNamedRange( string name, string rangeFormula, out IName? result ) =>
+    //    CreateNamedRange( name, rangeFormula, SheetIndex, out result );
 
-    protected bool CreateWorkbookNamedRange(string name, string rangeFormula, out IName? result) =>
-        CreateNamedRange(name, rangeFormula, -1, out result);
+    //protected bool CreateWorkbookNamedRange(string name, string rangeFormula, out IName? result) =>
+    //    CreateNamedRange(name, rangeFormula, -1, out result);
 
-    private bool CreateNamedRange( string name, string rangeFormula, int sheetIndex, out IName? result )
-    {
-        result = null;
+    //private bool CreateNamedRange( string name, string rangeFormula, int sheetIndex, out IName? result )
+    //{
+    //    result = null;
 
-        if ( !Initialized )
-        {
-            Logger.Error("Exporter is not initialized, cannot create worksheet named range"  );
-            return false;
-        }
+    //    if ( !Initialized )
+    //    {
+    //        Logger.Error("Exporter is not initialized, cannot create worksheet named range"  );
+    //        return false;
+    //    }
 
-        foreach( var existingRange in Workbook!.GetNames( name ) )
-        {
-            if( existingRange.SheetIndex != SheetIndex )
-                continue;
+    //    foreach( var existingRange in Workbook!.GetNames( name ) )
+    //    {
+    //        if( existingRange.SheetIndex != SheetIndex )
+    //            continue;
 
-            Logger.Error<string, string>($"Named range {0}!{1} already exists", SheetName!, name);
-            return false;
-        }
+    //        Logger.Warning<string, string>("Named range {0}!{1} already exists, replacing it", SheetName!, name);
 
-        try
-        {
-            result = Workbook!.CreateName();
-            result.NameName = name;
-            result.RefersToFormula = rangeFormula;
+    //        Workbook.RemoveName( existingRange.NameName );
+    //    }
 
-            if (sheetIndex >= 0)
-                result.SheetIndex = SheetIndex;
-        }
-        catch ( Exception ex )
-        {
-            Logger.Error<string, string>("Failed to create named range '{0}', message was {1}", name, ex.Message  );
-            result = null;
-        }
+    //    try
+    //    {
+    //        result = Workbook!.CreateName();
+    //        result.NameName = name;
+    //        result.RefersToFormula = rangeFormula;
 
-        return result != null;
-    }
+    //        if (sheetIndex >= 0)
+    //            result.SheetIndex = SheetIndex;
+    //    }
+    //    catch ( Exception ex )
+    //    {
+    //        Logger.Error<string, string>("Failed to create named range '{0}', message was {1}", name, ex.Message  );
+    //        result = null;
+    //    }
+
+    //    return result != null;
+    //}
 
     protected virtual bool StartExport() => true;
     protected virtual bool FinishExport() => true;

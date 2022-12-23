@@ -16,7 +16,6 @@ internal partial class DeusEx : J4JDeusExHosted
                         .ApplicationName( "WpFormsSurveyProcessor" )
                         .Publisher( "Jump for Joy Software" )
                         .LoggerInitializer( ConfigureLogging )
-                        .AddConfigurationInitializers(ConfigureConfiguration)
                         .AddDependencyInjectionInitializers( ConfigureDependencyInjection )
                         .FilePathTrimmer( FilePathTrimmer );
 
@@ -36,26 +35,6 @@ internal partial class DeusEx : J4JDeusExHosted
         loggerConfig.SerilogConfiguration
                     .WriteTo.Debug()
                     .WriteTo.Console();
-    }
-
-    private void ConfigureConfiguration(IConfigurationBuilder builder)
-    {
-        // build the current config so we can extract any argumnents specified on the command line
-        var temp = builder.Build();
-
-        var configPath = Path.Combine(Environment.CurrentDirectory, "appConfig.json");
-
-        try
-        {
-            var config = temp.Get<Configuration>();
-            configPath = config.ConfigurationFilePath;
-        }
-        catch
-        {
-            J4JDeusEx.Logger?.Error("Could not retrieve Configuration object while retrieving configuration file path");
-        }
-
-        builder.AddJsonFile(configPath);
     }
 
     private static string FilePathTrimmer(Type? loggedType,
