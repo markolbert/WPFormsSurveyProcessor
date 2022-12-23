@@ -8,6 +8,8 @@ namespace WPFormsSurveyProcessor;
 internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
 {
     private SubmissionInfo? _submissionInfo;
+    private int _users;
+    private int _prevUserId;
 
     public ExportSubmissions( 
         Configuration config,
@@ -35,7 +37,7 @@ internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
     public override bool Initialized => base.Initialized && _submissionInfo != null;
 
     protected override void ReportProgress() =>
-        Logger.Information( "    ...exported {0:n0} submissions", RecordNumber );
+        Logger.Information( "    ...exported {0:n0} responses from {1:n0} users", RecordNumber, _users );
 
     protected override bool StartExport()
     {
@@ -53,11 +55,20 @@ internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
 
         MoveRows();
 
+        _users = 0;
+        _prevUserId = -1;
+
         return true;
     }
 
     protected override bool ProcessRecord( IUserFieldResponse entity )
     {
+        if( entity.UserId != _prevUserId )
+        {
+            _users++;
+            _prevUserId = entity.UserId;
+        }
+
         SetCellValue(entity.UserId, null, 0);
         SetCellValue(entity.IpAddress);
         SetCellValue(entity.Submitted, "Date Submitted");
@@ -148,11 +159,6 @@ internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
                                                   RecordNumber + 1,
                                                   out _,
                                                   Logger);
-
-        //CreateWorksheetNamedRange("FieldKeys", $"{SheetName}!$H$2:$H${RecordNumber + 1}", out _);
-        //CreateWorksheetNamedRange("SubfieldKeys", $"{SheetName}!$I$2:$I${RecordNumber + 1}", out _);
-        //CreateWorksheetNamedRange("ResponseIndices", $"{SheetName}!$J$2:$J${RecordNumber + 1}", out _);
-        //CreateWorksheetNamedRange("Responses", $"{SheetName}!$K$2:$K${RecordNumber + 1}", out _);
 
         Logger.Information("    ...done");
         return true;
