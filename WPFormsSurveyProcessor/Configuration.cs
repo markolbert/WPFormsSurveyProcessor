@@ -1,7 +1,11 @@
-﻿namespace WPFormsSurveyProcessor;
+﻿using J4JSoftware.Utilities;
+
+namespace WPFormsSurveyProcessor;
 
 public class Configuration
 {
+    public const string DefaultConfigurationFile = "appConfig.json";
+
     public enum FileStatus
     {
         Nonexistent,
@@ -21,9 +25,9 @@ public class Configuration
         set
         {
             if (string.IsNullOrEmpty(value))
-                value = "config.json";
+                value = DefaultConfigurationFile;
 
-            _configFilePathIsValid = Extensions.ValidateConfigurationFilePath(value, out var result);
+            _configFilePathIsValid = FileExtensions.ValidateConfigurationFilePath(value, out var result);
             _configFilePath = _configFilePathIsValid ? result! : value;
         }
     }
