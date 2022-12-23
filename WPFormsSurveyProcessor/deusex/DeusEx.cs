@@ -21,7 +21,7 @@ internal partial class DeusEx : J4JDeusExHosted
 
         var cmdLineConfig = hostConfig.AddCommandLineProcessing( CommandLineOperatingSystems.Windows )
                                       .OptionsInitializer( SetCommandLineConfiguration )
-                                      .CommandLineConfigurationFile<Configuration>( x => x.ConfigurationFilePath );
+                                      .ConfigurationFileKeys( true, false, "c", "config" );
 
         return hostConfig;
     }
