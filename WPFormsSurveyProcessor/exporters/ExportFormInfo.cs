@@ -59,9 +59,6 @@ internal class ExportFormInfo : ExportSurveyBase<FormInfo>
                                                    out _,
                                                    Logger );
 
-        //CreateWorksheetNamedRange( "FormIds", $"{SheetName}!$A$2:$A${RecordNumber + 1}", out _ );
-        //CreateWorksheetNamedRange("FormNames", $"{SheetName}!$A$2:$B${RecordNumber + 1}", out _);
-
         Logger.Information("    ...done");
         return true;
     }

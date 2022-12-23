@@ -65,8 +65,6 @@ internal class ExportFieldDescriptions : ExportSurveyBase<FieldDescription>
                                                   out _,
                                                   Logger);
 
-        //CreateWorksheetNamedRange("Fields", $"{SheetName}!$C$2:$E${RecordNumber + 1}", out _);
-
         Logger.Information("    ...done");
         return true;
     }

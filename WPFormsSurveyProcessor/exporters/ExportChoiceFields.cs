@@ -67,8 +67,6 @@ internal class ExportChoiceFields : ExportSurveyBase<ChoiceFieldInfo>
                                                   out _,
                                                   Logger);
 
-        //CreateWorksheetNamedRange("Choices", $"{SheetName}!$E$2:$F${RecordNumber + 1}", out _);
-
         Logger.Information("    ...done");
         return true;
     }
