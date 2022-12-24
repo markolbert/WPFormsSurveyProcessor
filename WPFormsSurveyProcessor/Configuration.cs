@@ -58,6 +58,7 @@ public class Configuration
 
     public FileStatus EntriesFileStatus { get; private set; } = FileStatus.Undefined;
 
+    public Exporters InformationToExport { get; set; } = Exporters.All;
     public string ExcelFilePath { get; set; } = "WpForms.xlsx";
 
     public List<int> FormIds { get; set; } = new();

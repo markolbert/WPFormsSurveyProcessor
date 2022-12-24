@@ -2,7 +2,7 @@
   "profiles": {
     "WPFormsSurveyProcessor": {
       "commandName": "Project",
-      "commandLineArgs": "/p \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\wp_posts.json\" /e \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\catching up\\\\wp_wpforms_entries.json\" /x \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\catching up\\\\Catching Up 2022-12-23.xlsx\" /f 1740 /c \"appConfig.json\""
+      "commandLineArgs": "/p \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\wp_posts.json\" /e \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\catching up\\\\wp_wpforms_entries.json\" /x \"C:\\\\Users\\\\mark\\\\OneDrive - arcabama\\\\Ardsley73\\\\surveys\\\\catching up\\\\Catching Up 2022-12-23b.xlsx\" /s ChoiceFields Submissions /f 1740 /c \"appConfig.json\""
     }
   }
 }

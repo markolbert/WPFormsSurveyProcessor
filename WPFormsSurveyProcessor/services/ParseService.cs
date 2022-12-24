@@ -1,5 +1,6 @@
 ﻿using J4JSoftware.Logging;
 using NPOI.XSSF.UserModel;
+using Org.BouncyCastle.Math.EC;
 using WpFormsSurvey;
 
 namespace WPFormsSurveyProcessor;
@@ -106,12 +107,12 @@ internal class ParseService : ServiceBase
         if( Configuration.FormIds.Any() )
         {
             formDefinitions = formsDownload.Data
-                                        .Where( x => Configuration.FormIds.Any( y => x.Id == y ) )
-                                        .ToList();
+                                           .Where( x => Configuration.FormIds.Any( y => x.Id == y ) )
+                                           .ToList();
 
             if( !formDefinitions.Any() )
             {
-                Logger.Warning("No form(s) with that/those form ids were found");
+                Logger.Warning( "No form(s) with that/those form ids were found" );
                 return Task.CompletedTask;
             }
         }
@@ -120,31 +121,35 @@ internal class ParseService : ServiceBase
         if( responsesDownload?.Data is not {} individualSubmissions )
             return Task.CompletedTask;
 
-        if (Configuration.FormIds.Any())
+        if( Configuration.FormIds.Any() )
         {
             individualSubmissions = individualSubmissions
-                                           .Where(x => Configuration.FormIds.Any(y => x.FormId == y))
-                                           .ToList();
+                                   .Where( x => Configuration.FormIds.Any( y => x.FormId == y ) )
+                                   .ToList();
 
-            if (!individualSubmissions.Any())
+            if( !individualSubmissions.Any() )
             {
-                Logger.Warning("No submissions(s) with that/those form ids were found");
+                Logger.Warning( "No submissions(s) with that/those form ids were found" );
                 return Task.CompletedTask;
             }
         }
 
-        var workbook = new XSSFWorkbook(XSSFWorkbookType.XLSX);
+        var workbook = new XSSFWorkbook( XSSFWorkbookType.XLSX );
 
-        if( !ExportFormInfo( workbook, formDefinitions ) )
+        if( ( Configuration.InformationToExport & Exporters.FormInformation ) == Exporters.FormInformation
+        && !ExportFormInfo( workbook, formDefinitions ) )
             return Task.CompletedTask;
 
-        if (!ExportFieldDescriptions(workbook, formDefinitions))
+        if( ( Configuration.InformationToExport & Exporters.FieldDescriptions ) == Exporters.FieldDescriptions
+        && !ExportFieldDescriptions( workbook, formDefinitions ) )
             return Task.CompletedTask;
 
-        if (!ExportChoiceFields(workbook, formDefinitions))
+        if( ( Configuration.InformationToExport & Exporters.ChoiceFields ) == Exporters.ChoiceFields
+        && !ExportChoiceFields( workbook, formDefinitions ) )
             return Task.CompletedTask;
 
-        if ( !ExportSubmissions(workbook, new SubmissionInfo(formDefinitions, individualSubmissions)))
+        if( ( Configuration.InformationToExport & Exporters.Submissions ) == Exporters.Submissions
+        && !ExportSubmissions( workbook, new SubmissionInfo( formDefinitions, individualSubmissions ) ) )
             return Task.CompletedTask;
 
         try
