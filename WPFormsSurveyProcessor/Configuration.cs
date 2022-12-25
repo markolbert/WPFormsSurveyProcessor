@@ -64,6 +64,7 @@ public class Configuration
     public List<int> FormIds { get; set; } = new();
     public bool DisplayFormInfo { get; set; }
     public bool ShowHelp { get; set; }
+    public bool ShowDocumentation { get; set; }
 
     public NamedRangeConfigurations? RangeConfigurations { get; set; }
 
@@ -71,7 +72,7 @@ public class Configuration
     {
         get
         {
-            if( ShowHelp )
+            if( ShowHelp || ShowDocumentation )
                 return null;
 
             if (!_configFilePathIsValid)
