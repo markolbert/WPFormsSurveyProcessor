@@ -24,10 +24,13 @@ internal partial class DeusEx
         options.Bind<Configuration, List<int>>( x => x.FormIds, "f", "formIds" )!
                .SetDescription("one or more WpForms ids to process (empty means process all)");
 
-        options.Bind<Configuration, bool>( x => x.DisplayFormInfo, "d", "displayFormInfo" )!
+        options.Bind<Configuration, bool>( x => x.DisplayFormInfo, "i", "formInfo" )!
                .SetDescription("display information about processed forms and/or entries");
 
         options.Bind<Configuration, bool>( x => x.ShowHelp, "h", "help" )!
                .SetDescription("display help");
+
+        options.Bind<Configuration, bool>(x => x.ShowDocumentation, "d", "docs")!
+               .SetDescription("display documentation in browser");
     }
 }

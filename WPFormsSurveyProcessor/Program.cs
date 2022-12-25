@@ -36,6 +36,9 @@ internal class Program
         if (config.ShowHelp)
             return J4JDeusEx.ServiceProvider.GetRequiredService<HelpService>();
 
+        if (config.ShowDocumentation)
+            return J4JDeusEx.ServiceProvider.GetRequiredService<DocumentationService>();
+
         return J4JDeusEx.ServiceProvider.GetRequiredService<ParseService>();
     }
 }

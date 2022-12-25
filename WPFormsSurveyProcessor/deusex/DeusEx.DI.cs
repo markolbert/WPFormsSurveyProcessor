@@ -29,6 +29,10 @@ internal partial class DeusEx
                .AsSelf()
                .SingleInstance();
 
+        builder.RegisterType<DocumentationService>()
+               .AsSelf()
+               .SingleInstance();
+
         builder.RegisterType<ParseService>()
                .AsSelf()
                .SingleInstance();
