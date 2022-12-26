@@ -24,6 +24,9 @@ public class Form
     [JsonPropertyName("post_status")]
     public string PostStatus { get; set; } = string.Empty;
 
+    [JsonPropertyName("post_type")]
+    public string? PostType { get; set; }
+
     [JsonPropertyName("post_content")]
     public string? PostContent { get; set; }
 

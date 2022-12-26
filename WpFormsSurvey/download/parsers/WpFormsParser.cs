@@ -84,7 +84,9 @@ public class WpFormsParser : WpParserBase<FieldBase>
 
         foreach (var formDef in download.Table!.Data!)
         {
-            if (formDef.PostContent == null)
+            // only read wpforms types with defined content
+            if( ( !formDef.PostType?.Equals( "wpforms", StringComparison.OrdinalIgnoreCase ) ?? true )
+            || formDef.PostContent == null )
                 continue;
 
             var fieldsContent = JsonSerializer.Deserialize<FieldsContent>(formDef.PostContent, options);
