@@ -53,8 +53,8 @@ internal class ExportFormInfo : ExportSurveyBase<FormInfo>
     {
         AutoSizeColumns();
 
-        if( Configuration.RangeConfigurations?.Forms != null )
-            Worksheet!.CreateWorksheetNamedRanges( Configuration.RangeConfigurations.Forms,
+        if( RangeConfigurations?.Forms != null )
+            Worksheet!.CreateWorksheetNamedRanges( RangeConfigurations.Forms,
                                                    RecordNumber + 1,
                                                    out _,
                                                    Logger );

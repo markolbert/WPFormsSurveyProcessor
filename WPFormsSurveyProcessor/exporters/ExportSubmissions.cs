@@ -154,8 +154,8 @@ internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
     {
         AutoSizeColumns();
 
-        if (Configuration.RangeConfigurations?.Submissions != null)
-            Worksheet!.CreateWorksheetNamedRanges(Configuration.RangeConfigurations.Submissions,
+        if (RangeConfigurations?.Submissions != null)
+            Worksheet!.CreateWorksheetNamedRanges(RangeConfigurations.Submissions,
                                                   RecordNumber + 1,
                                                   out _,
                                                   Logger);

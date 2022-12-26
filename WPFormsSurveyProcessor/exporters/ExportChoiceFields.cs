@@ -61,8 +61,8 @@ internal class ExportChoiceFields : ExportSurveyBase<ChoiceFieldInfo>
     {
         AutoSizeColumns();
 
-        if (Configuration.RangeConfigurations?.Choices != null)
-            Worksheet!.CreateWorksheetNamedRanges(Configuration.RangeConfigurations.Choices,
+        if (RangeConfigurations?.Choices != null)
+            Worksheet!.CreateWorksheetNamedRanges(RangeConfigurations.Choices,
                                                   RecordNumber + 1,
                                                   out _,
                                                   Logger);

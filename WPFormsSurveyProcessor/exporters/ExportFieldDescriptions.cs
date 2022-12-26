@@ -59,8 +59,8 @@ internal class ExportFieldDescriptions : ExportSurveyBase<FieldDescription>
     {
         AutoSizeColumns();
 
-        if (Configuration.RangeConfigurations?.Fields != null)
-            Worksheet!.CreateWorksheetNamedRanges(Configuration.RangeConfigurations.Fields,
+        if (RangeConfigurations?.Fields != null)
+            Worksheet!.CreateWorksheetNamedRanges(RangeConfigurations.Fields,
                                                   RecordNumber + 1,
                                                   out _,
                                                   Logger);

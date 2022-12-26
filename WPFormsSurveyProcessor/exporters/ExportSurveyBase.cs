@@ -16,4 +16,5 @@ internal abstract class ExportSurveyBase<TEntity> : ExportBase<TEntity>
     }
 
     protected Configuration Configuration { get; }
+    protected NamedRangeConfigurations RangeConfigurations => Configuration.ExcelFileInfo.RangeConfigurations;
 }

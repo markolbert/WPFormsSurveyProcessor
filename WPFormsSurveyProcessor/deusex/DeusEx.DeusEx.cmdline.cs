@@ -15,10 +15,10 @@ internal partial class DeusEx
         options.Bind<Configuration, string>( x => x.PostsFilePath, "p", "posts" )!
                .SetDescription("path to JSON file containing WpForms' WordPress posts");
 
-        options.Bind<Configuration, Exporters>(x => x.InformationToExport, "s", "scope")!
-               .SetDescription("information to export");
+        options.Bind<Configuration, Exporters>( x => x.ExcelFileInfo.InformationToExport, "s", "scope" )!
+               .SetDescription( "information to export" );
 
-        options.Bind<Configuration, string>(x => x.ExcelFilePath, "x", "excel")!
+        options.Bind<Configuration, string>(x => x.ExcelFileInfo.FileName, "x", "excel")!
                .SetDescription("path to Excel file to be created");
 
         options.Bind<Configuration, List<int>>( x => x.FormIds, "f", "formIds" )!
