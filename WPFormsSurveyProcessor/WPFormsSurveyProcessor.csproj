@@ -2,9 +2,26 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
+	  <AssemblyName>J4JSoftware.WpFormsSurveyProcessor</AssemblyName>
+	  <RootNamespace>J4JSoftware.WpFormsSurvey</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <Authors>Mark A. Olbert</Authors>
+	  <Company>Jump for Joy Software</Company>
+	  <Product>J4JSoftware WPForms Export Console Application</Product>
+	  <Description>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</Description>
+	  <Copyright>© Mark A. Olbert all rights reserved</Copyright>
+	  <RepositoryUrl>https://github.com/markolbert/WPFormsSurveyProcessor</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+	  <Version>1.0.0.0</Version>
+	  <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+	  <PackageDescription>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</PackageDescription>
+	  <PackageIcon>Diego nuspec.png</PackageIcon>
+	  <PackageReleaseNotes>initial release</PackageReleaseNotes>
+	  <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +39,15 @@
     <ProjectReference Include="..\..\ProgrammingUtilities\MiscellaneousUtilities\MiscellaneousUtilities.csproj" />
     <ProjectReference Include="..\WpFormsSurvey\WpFormsSurvey.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="docs/readme.md" Pack="true" PackagePath="/" />
+		<None Include="../LICENSE.md" />
+	</ItemGroup>
 
   <ItemGroup>
     <None Update="appConfig.json">
