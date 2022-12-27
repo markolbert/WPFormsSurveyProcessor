@@ -26,6 +26,12 @@
 
   <ItemGroup>
     <PackageReference Include="Alba.CsConsoleFormat-NoXaml" Version="1.0.0" />
+    <PackageReference Include="J4JSoftware.Configuration.CommandLine" Version="4.2.0" />
+    <PackageReference Include="J4JSoftware.Configuration.J4JCommandLine.ColorfulHelp" Version="1.3.0" />
+    <PackageReference Include="J4JSoftware.DependencyInjection" Version="2.3.0" />
+    <PackageReference Include="J4JSoftware.Logging" Version="4.2.0" />
+    <PackageReference Include="J4JSoftware.MiscellaneousUtilities" Version="2.1.0" />
+    <PackageReference Include="J4JSoftware.WpFormsSurvey" Version="1.0.0" />
     <PackageReference Include="NPOI" Version="2.6.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />

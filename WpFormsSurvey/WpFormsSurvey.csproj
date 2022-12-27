@@ -28,15 +28,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="J4JSoftware.Logging" Version="4.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
 		<None Include="docs/readme.md" Pack="true" PackagePath="/" />
 		<None Include="../LICENSE.md" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="docs\" />
 	</ItemGroup>
 </Project>
