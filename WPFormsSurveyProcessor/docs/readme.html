@@ -1,0 +1,185 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><h1 id="wpformssurveyprocessor-usage">WpFormsSurveyProcessor: Usage</h1>
+<h2 id="overview">Overview</h2>
+<p><strong>WpFormsSurveyProcessor</strong> exports WordPress WpForms form and survey response data to an Excel (xlsx) file. You can export one or more of the following data sets, each of which will be on a separate worksheet (the bolded terms refer to the command line values used to restrict output to certain datasets):</p>
+<ul>
+<li>WpForms id and name (<strong>FormInformation</strong>)</li>
+<li>Field descriptions, including form and field ids (<strong>FieldDescriptions</strong>)</li>
+<li>Details on choices for choice fields (e.g., checkbox, radio) (<strong>FieldDescriptions</strong>)</li>
+<li>User responses/submissions (<strong>Submissions</strong>)</li>
+</ul>
+<p>You can also export all the datasets using the command line term <strong>All</strong> (which is the default and need not be specified).</p>
+<h2 id="command-line-options">Command Line Options</h2>
+<p>The option flags are case insensitive.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">/h, /help</td>
+<td>Display simple help information</td>
+</tr>
+<tr>
+<td style="text-align:center">/d, /docs</td>
+<td>Display this documentation in a browser</td>
+</tr>
+<tr>
+<td style="text-align:center">/c, /config</td>
+<td>Path to the application configuration file. If not specified, the default <em>appConfig.json</em> file in the application directory is used</td>
+</tr>
+<tr>
+<td style="text-align:center">/p, /posts</td>
+<td>Path to the file containing the WordPress posts. This is where WpForms stores form definitions. See below for details on creating this file.</td>
+</tr>
+<tr>
+<td style="text-align:center">/e, /entries</td>
+<td>Path to the file containing the WpForms user entries. See below for details on creating this file.</td>
+</tr>
+<tr>
+<td style="text-align:center">/x, /excel</td>
+<td>Path to the export file created by the program. <em>Warning: existing files will be overwritten without confirmation.</em></td>
+</tr>
+<tr>
+<td style="text-align:center">/s, /scope</td>
+<td>Defines the information/worksheets to be exported. See below for details.</td>
+</tr>
+<tr>
+<td style="text-align:center">/t, /ts</td>
+<td>Defines the time stamp, if any, added to the Excel file name. See below for details.</td>
+</tr>
+<tr>
+<td style="text-align:center">/f, /formIds/</td>
+<td>A list of form ids to export. If not specified, all forms will be exported.</td>
+</tr>
+<tr>
+<td style="text-align:center">/i, /formInfo</td>
+<td>Displays a list of form names and ids contained in the provided WordPress posts file.</td>
+</tr>
+</tbody>
+</table>
+<p>The /f and /s options allow multiple values to be provided, separated by either commas or spaces.</p>
+<h2 id="export-file-name">Export File Name</h2>
+<p>When you specify an export file name it is checked to ensure it can be written. If for some reason the path you supply is not, the export file name will be changed to something that is writable. This could result in the export file being written to the current directory, so if you don&#39;t find the file where you expect it, review the actual name of the file being written. That&#39;s echoed to the console when it is created.</p>
+<p>You can modify how export files are time stamped through the command line or by modifying the <code>appJson.config</code> file, located in the executable folder. The available options are:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Time Stamp Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">None</td>
+<td>No time stamp is added</td>
+</tr>
+<tr>
+<td style="text-align:center">DateOnly</td>
+<td>A yyyy-mm-dd (year/month/day) time stamp is added</td>
+</tr>
+<tr>
+<td style="text-align:center">DateAndTime</td>
+<td>A yyyy-mm-dd hh-mm-ss (year/month/day hours/minutes/seconds) time stamp is added</td>
+</tr>
+</tbody>
+</table>
+<h2 id="defining-named-ranges">Defining Named Ranges</h2>
+<p>The default <em>appConfig.json</em> configuration file defines a number of named ranges that are created when data is exported. You can define your own by modifying the file, which is located in the directory/folder where you installed the application.</p>
+<p>Here are the default settings:</p>
+<pre><code class="lang-json">{
+  <span class="hljs-attr">"ExcelFileInfo"</span> : {
+    <span class="hljs-attr">"RangeConfigurations"</span>: {
+      <span class="hljs-attr">"Forms"</span>: [
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"FormIds"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"A"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"FormNames"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"A"</span>,
+          <span class="hljs-attr">"LastColumn"</span>: <span class="hljs-string">"B"</span>
+        }
+      ],
+      <span class="hljs-attr">"Fields"</span>: [
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Fields"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"C"</span>,
+          <span class="hljs-attr">"LastColumn"</span>: <span class="hljs-string">"E"</span>
+        }
+      ],
+      <span class="hljs-attr">"Choices"</span>: [
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Choices"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"E"</span>,
+          <span class="hljs-attr">"LastColumn"</span>: <span class="hljs-string">"F"</span>
+        }
+      ],
+      <span class="hljs-attr">"Submissions"</span>: [
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"FieldKeys"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"H"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"SubfieldKeys"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"I"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"ResponseIndices"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"J"</span>
+        },
+        {
+          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Responses"</span>,
+          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
+          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"K"</span>
+        }
+      ]
+    }
+  }
+}
+</code></pre>
+<p>Each exported spreadsheet is targeted by a property identified by its name, and includes one array of objects defining the named ranges to be created. The full syntax for the named range object looks like this:</p>
+<pre><code class="lang-json">{
+    <span class="hljs-string">"Name"</span>: <span class="hljs-keyword">range</span><span class="hljs-symbol">'s</span> name,
+    <span class="hljs-string">"Context"</span>: the value Worksheet <span class="hljs-keyword">or</span> Workbook (see below),
+    <span class="hljs-string">"FirstColumn"</span>: the letter <span class="hljs-keyword">of</span> the column starting the <span class="hljs-keyword">range</span>,
+    <span class="hljs-string">"LastColumn"</span>: the letter ending the <span class="hljs-keyword">range</span> (see below),
+    <span class="hljs-string">"IncludeHeader"</span>: <span class="hljs-literal">true</span> <span class="hljs-keyword">or</span> <span class="hljs-literal">false</span> (see below)
+}
+</code></pre>
+<p>For <strong>Context</strong>, Worksheet means the range is defined at the worksheet level and you&#39;ll need to refer to it as <em>sheetname!range-name</em>. Workbook means the range is defined at the workbook level, and doesn&#39;t require a prefix to be referenced.</p>
+<p><strong>LastColumn</strong> is optional. If omitted, the named range will be one column wide (i.e., the last column will be the same as the first).</p>
+<p><strong>IncludeHeader</strong> controls whether or not the header row is included in the named range. By default it&#39;s false and the header is <em>not</em> included.</p>
+<h2 id="creating-the-required-files">Creating the Required Files</h2>
+<p><strong>WpFormsSurveyProcessor</strong> requires at least a definition of the WpForms objects to display information about the forms. To export data, however, it also requires the user submissions. Both of these files can be exported from the database used by you WordPress website.</p>
+<p>There are various ways to do this, depending on how comfortable you are with directly accessing that database. However, the simpler approach is to use <strong>PhpMyAdmin</strong>, if it&#39;s available for your site. These directions use that approach.</p>
+<h3 id="creating-the-forms-definition-file">Creating the Forms Definition File</h3>
+<p>Navigate to the <em>wp_posts</em> table, which WordPress uses to contain all of the posts in your site, which includes the definitions of your WPForms forms.</p>
+<p><img src="assets/nav2wpposts.png" alt="navigate to wp_posts"></p>
+<p>The wp_posts table contains entries like the following:</p>
+<p><img src="assets/posts.png" alt="wp_posts entries"></p>
+<p>You could simply export this entire file and process it. But it&#39;s likely to be quite large, so a better way is to extract only the posts created by WPForms. You can do that by clicking on the <strong>SQL</strong> tab at the top of the right-hand pane and modifying the default filter condition. After making the change, click the Go button:</p>
+<p><img src="assets/filter-posts.png" alt="filtering posts"></p>
+<p>Now click the <strong>Export</strong> tab at the top of the right-hand pane, select JSON as the output format, and click the Go button. </p>
+<p><img src="assets/export-json.png" alt="export JSON"></p>
+<p>You can also format the JSON in human-friendly form if you want to, although that&#39;s not required.</p>
+<p>The export generates a file you download and save someplace where <strong>WpFormsSurveyProcessor</strong> can access it.</p>
+<h3 id="creating-the-user-entries-file">Creating the User Entries File</h3>
+<p>Navigate to the <em>wp_wpforms_entries</em> table, which WPForms uses to contain survey responses. It will look something like this:</p>
+<p><img src="assets/survey-entries.png" alt="user entries"></p>
+<p>As with the wp_forms table, you can export this entire table and process it. But if you only want the information for one or a few surveys it&#39;s worth filtering the table before exporting it. You do this by changing the WHERE condition on the SQL tab in the right-hand pane:</p>
+<p><img src="assets/filter-responses.png" alt="filtering user entries"></p>
+<p>The rest of the export process mimics what was described for creating the forms definition file: select JSON as the export format, click Export, and save the downloaded file someplace where <strong>WpFormsSurveyProcess</strong> can access it.</p>
+</body></html>
