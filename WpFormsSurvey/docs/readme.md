@@ -2,7 +2,7 @@
 
 This library supports parsing the WPForms form descriptions from a WordPress site, and any associated survey responses.
 
-The library repository is available on [github](https://github.com/markolbert/WPFormsSurveyProcessor).
+The library repository is available on [github](https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.md).
 
 The change log is [available here](changes.md).
 

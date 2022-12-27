@@ -5,7 +5,7 @@ This repository contains two projects, a library for parsing and exporting WPFor
 |Project|Description|
 |-------|-----------|
 |[WpFormsSurvey](WpFormsSurvey/docs/readme.md)|The parsing library|
-|[WpFormsSurveyProcessor](WpFormsSurveyProcessor/docs/readme.md)|The console program|
+|[WpFormsSurveyProcessor]([WpFormsSurveyProcessor/docs/readme.md](https://github.com/markolbert/WPFormsSurveyProcessor/tree/master/WPFormsSurveyProcessor))|The console program|
 
 ## License, Copyrights, etc
 
