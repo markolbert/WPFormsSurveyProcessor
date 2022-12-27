@@ -21,6 +21,9 @@ internal partial class DeusEx
         options.Bind<Configuration, string>(x => x.ExcelFileInfo.FileName, "x", "excel")!
                .SetDescription("path to Excel file to be created");
 
+        options.Bind<Configuration, ExcelTimeStamp>(x => x.ExcelFileInfo.TimeStamp, "t", "ts")!
+               .SetDescription("define the time stamp, if any, added to the Excel file name");
+
         options.Bind<Configuration, List<int>>( x => x.FormIds, "f", "formIds" )!
                .SetDescription("one or more WpForms ids to process (empty means process all)");
 
