@@ -17,7 +17,7 @@ internal class DocumentationService : ServiceBase
     {
         var docsDir = Path.Combine( Environment.CurrentDirectory, "docs" );
 
-        var htmlPath = Path.Combine(docsDir, "docs.html");
+        var htmlPath = Path.Combine(docsDir, "readme.html");
         if( !File.Exists( htmlPath ) )
         {
             Logger.Warning("Documentation file not available or accessible");
