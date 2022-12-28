@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
-	  <AssemblyName>J4JSoftware.WpFormsSurveyProcessor</AssemblyName>
+	  <AssemblyName>WpFormsProcessor</AssemblyName>
 	  <RootNamespace>J4JSoftware.WpFormsSurvey</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
