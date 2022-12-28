@@ -1,0 +1,71 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><h1 id="j4jsoftware-wpformssurveyprocessor-developer-information">J4JSoftware.WpFormsSurveyProcessor Developer Information</h1>
+<p>This app relies on a number of libraries I wrote and maintain. You can visit their GitHub repositories by clicking on the library name:</p>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/markolbert/J4JLogging">J4JLogger</a></td>
+<td>wrapper/extension to <a href="https://github.com/serilog">Serilog</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markolbert/J4JCommandLine">J4JCommandLine</a></td>
+<td>command line processor that works with the <code>IConfiguration</code> API</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markolbert/ProgrammingUtilities/tree/master/DependencyInjection">DependencyInjection</a></td>
+<td>root object resolver that works with the <code>IHostBuilder</code>/<code>IHost</code> API and <a href="https://autofac.org/">Autofac</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markolbert/ProgrammingUtilities/tree/master/MiscellaneousUtilities">MiscellaneousUtilities</a></td>
+<td>various utility methods</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markolbert/ProgrammingUtilities/tree/master/MiscellaneousUtilities">ColorfulHelp</a></td>
+<td>add on to <code>J4JCommandLine</code> which displays formatted command line help</td>
+</tr>
+<tr>
+<td><a href="https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.md">WpFormsSurvey</a></td>
+<td>importers for WPForms form definitions and survey responses</td>
+</tr>
+</tbody>
+</table>
+<p>The application is structured around a series of services, each mapped to a specific configuration of command line options. Click on the links for more information about the primary services:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HelpService</code></td>
+<td>displays formatted help</td>
+</tr>
+<tr>
+<td><code>DocumentationService</code></td>
+<td>displays documentation in a browser window</td>
+</tr>
+<tr>
+<td><code>MisconfigurationService</code></td>
+<td>displays help and then a series of error messsages</td>
+</tr>
+<tr>
+<td><a href="form-info-service.html">FormInfoService</a></td>
+<td>parses a downloaded WordPress posts file and displays a list of forms and their ids</td>
+</tr>
+<tr>
+<td><a href="parsing-service.html">ParseService</a></td>
+<td>parses downloaded WordPress posts and WPForms survey responses files and creates an Excel spreadsheet</td>
+</tr>
+</tbody>
+</table>
+</body></html>

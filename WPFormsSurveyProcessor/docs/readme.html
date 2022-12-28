@@ -1,9 +1,22 @@
 <html><head><style>body {
    color: black;
 }
-</style></head><body><h1 id="wpformssurveyprocessor-usage">WpFormsSurveyProcessor: Usage</h1>
+</style></head><body><h1 id="j4jsoftware-wpformssurveyprocessor">J4JSoftware.WpFormsSurveyProcessor</h1>
+<p><em>These are the usage instructions for the executable. Developer information for the code base is <a href="developer.html">available here</a>.</em></p>
+<p><em>The change log is <a href="changes.html">available here</a></em>.</p>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#command-line-options">Command Line Options</a></li>
+<li><a href="#export-file-name">Export File Name</a></li>
+<li><a href="#defining-named-ranges">Defining Named Ranges</a></li>
+<li><a href="#creating-the-required-files">Creating the Required Files</a><ul>
+<li><a href="#creating-the-forms-definition-file">Creating the Forms Definition File</a></li>
+<li><a href="#creating-the-user-entries-file">Creating the User Entries File</a></li>
+</ul>
+</li>
+</ul>
 <h2 id="overview">Overview</h2>
-<p><strong>WpFormsSurveyProcessor</strong> exports WordPress WpForms form and survey response data to an Excel (xlsx) file. You can export one or more of the following data sets, each of which will be on a separate worksheet (the bolded terms refer to the command line values used to restrict output to certain datasets):</p>
+<p><strong>WpFormsSurveyProcessor</strong> exports WordPress WPForms form and survey response data to an Excel (xlsx) file. You can export one or more of the following data sets, each of which will be on a separate worksheet (the bolded terms refer to the command line values used to restrict output to certain datasets):</p>
 <ul>
 <li>WpForms id and name (<strong>FormInformation</strong>)</li>
 <li>Field descriptions, including form and field ids (<strong>FieldDescriptions</strong>)</li>
@@ -172,7 +185,7 @@
 <p><img src="assets/posts.png" alt="wp_posts entries"></p>
 <p>You could simply export this entire file and process it. But it&#39;s likely to be quite large, so a better way is to extract only the posts created by WPForms. You can do that by clicking on the <strong>SQL</strong> tab at the top of the right-hand pane and modifying the default filter condition. After making the change, click the Go button:</p>
 <p><img src="assets/filter-posts.png" alt="filtering posts"></p>
-<p>Now click the <strong>Export</strong> tab at the top of the right-hand pane, select JSON as the output format, and click the Go button. </p>
+<p>Now click the <strong>Export</strong> tab at the top of the right-hand pane, select JSON as the output format, and click the Go button.</p>
 <p><img src="assets/export-json.png" alt="export JSON"></p>
 <p>You can also format the JSON in human-friendly form if you want to, although that&#39;s not required.</p>
 <p>The export generates a file you download and save someplace where <strong>WpFormsSurveyProcessor</strong> can access it.</p>

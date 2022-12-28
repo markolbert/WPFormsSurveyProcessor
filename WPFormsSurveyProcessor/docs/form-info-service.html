@@ -1,0 +1,9 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><h1 id="form-information-service">Form Information Service</h1>
+<p>This service parses a JSON-formatted file of WordPress posts and displays the WPForms forms and their ids contained in the file. All posts other than those defined by WPForms are ignored. All WPForms form definitions, whether or not they are for surveys, are included.</p>
+<p>The files are assumed to have been exported by PHPMyAdmin, which creates download files structured in a particular way.</p>
+<p>The service works by calling the <code>ParseFile()</code> method on an instance of <code>WpFormsParser</code>, supplying the path defined on the command line with the <strong>/p</strong> or <strong>/posts</strong> option.</p>
+<p>For more information on <code>WpFormsParser</code>, consult its <a href="https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.md">github repository</a>.</p>
+</body></html>

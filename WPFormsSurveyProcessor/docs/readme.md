@@ -1,13 +1,16 @@
 # J4JSoftware.WpFormsSurveyProcessor
 
-- [J4JSoftware.WpFormsSurveyProcessor](#j4jsoftwarewpformssurveyprocessor)
-  - [Overview](#overview)
-  - [Command Line Options](#command-line-options)
-  - [Export File Name](#export-file-name)
-  - [Defining Named Ranges](#defining-named-ranges)
-  - [Creating the Required Files](#creating-the-required-files)
-    - [Creating the Forms Definition File](#creating-the-forms-definition-file)
-    - [Creating the User Entries File](#creating-the-user-entries-file)
+*These are the usage instructions for the executable. Developer information for the code base is [available here](developer.md).*
+
+*The change log is [available here](changes.md)*.
+
+- [Overview](#overview)
+- [Command Line Options](#command-line-options)
+- [Export File Name](#export-file-name)
+- [Defining Named Ranges](#defining-named-ranges)
+- [Creating the Required Files](#creating-the-required-files)
+  - [Creating the Forms Definition File](#creating-the-forms-definition-file)
+  - [Creating the User Entries File](#creating-the-user-entries-file)
 
 ## Overview
 
