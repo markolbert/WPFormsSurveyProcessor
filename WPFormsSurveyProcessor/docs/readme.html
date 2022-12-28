@@ -1,7 +1,46 @@
-<html><head><style>body {
-   color: black;
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>J4JSoftware&period;WpFormsSurveyProcessor</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
 }
-</style></head><body><h1 id="j4jsoftware-wpformssurveyprocessor">J4JSoftware.WpFormsSurveyProcessor</h1>
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="j4jsoftwarewpformssurveyprocessor">J4JSoftware.WpFormsSurveyProcessor</h1>
 <p><em>These are the usage instructions for the executable. Developer information for the code base is <a href="developer.html">available here</a>.</em></p>
 <p><em>The change log is <a href="changes.html">available here</a></em>.</p>
 <ul>
@@ -9,7 +48,8 @@
 <li><a href="#command-line-options">Command Line Options</a></li>
 <li><a href="#export-file-name">Export File Name</a></li>
 <li><a href="#defining-named-ranges">Defining Named Ranges</a></li>
-<li><a href="#creating-the-required-files">Creating the Required Files</a><ul>
+<li><a href="#creating-the-required-files">Creating the Required Files</a>
+<ul>
 <li><a href="#creating-the-forms-definition-file">Creating the Forms Definition File</a></li>
 <li><a href="#creating-the-user-entries-file">Creating the User Entries File</a></li>
 </ul>
@@ -78,7 +118,7 @@
 </table>
 <p>The /f and /s options allow multiple values to be provided, separated by either commas or spaces.</p>
 <h2 id="export-file-name">Export File Name</h2>
-<p>When you specify an export file name it is checked to ensure it can be written. If for some reason the path you supply is not, the export file name will be changed to something that is writable. This could result in the export file being written to the current directory, so if you don&#39;t find the file where you expect it, review the actual name of the file being written. That&#39;s echoed to the console when it is created.</p>
+<p>When you specify an export file name it is checked to ensure it can be written. If for some reason the path you supply is not, the export file name will be changed to something that is writable. This could result in the export file being written to the current directory, so if you don't find the file where you expect it, review the actual name of the file being written. That's echoed to the console when it is created.</p>
 <p>You can modify how export files are time stamped through the command line or by modifying the <code>appJson.config</code> file, located in the executable folder. The available options are:</p>
 <table>
 <thead>
@@ -105,94 +145,98 @@
 <h2 id="defining-named-ranges">Defining Named Ranges</h2>
 <p>The default <em>appConfig.json</em> configuration file defines a number of named ranges that are created when data is exported. You can define your own by modifying the file, which is located in the directory/folder where you installed the application.</p>
 <p>Here are the default settings:</p>
-<pre><code class="lang-json">{
-  <span class="hljs-attr">"ExcelFileInfo"</span> : {
-    <span class="hljs-attr">"RangeConfigurations"</span>: {
-      <span class="hljs-attr">"Forms"</span>: [
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"FormIds"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"A"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"FormNames"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"A"</span>,
-          <span class="hljs-attr">"LastColumn"</span>: <span class="hljs-string">"B"</span>
-        }
-      ],
-      <span class="hljs-attr">"Fields"</span>: [
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Fields"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"C"</span>,
-          <span class="hljs-attr">"LastColumn"</span>: <span class="hljs-string">"E"</span>
-        }
-      ],
-      <span class="hljs-attr">"Choices"</span>: [
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Choices"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"E"</span>,
-          <span class="hljs-attr">"LastColumn"</span>: <span class="hljs-string">"F"</span>
-        }
-      ],
-      <span class="hljs-attr">"Submissions"</span>: [
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"FieldKeys"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"H"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"SubfieldKeys"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"I"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"ResponseIndices"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"J"</span>
-        },
-        {
-          <span class="hljs-attr">"Name"</span>: <span class="hljs-string">"Responses"</span>,
-          <span class="hljs-attr">"Context"</span>: <span class="hljs-string">"Worksheet"</span>,
-          <span class="hljs-attr">"FirstColumn"</span>: <span class="hljs-string">"K"</span>
-        }
-      ]
-    }
-  }
-}
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;ExcelFileInfo&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;RangeConfigurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;Forms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;FormIds&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A&quot;</span>
+        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;FormNames&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;B&quot;</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Fields&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Fields&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;C&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;E&quot;</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Choices&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Choices&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;E&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;F&quot;</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Submissions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;FieldKeys&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;H&quot;</span>
+        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;SubfieldKeys&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;I&quot;</span>
+        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ResponseIndices&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;J&quot;</span>
+        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-punctuation">{</span>
+          <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Responses&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
+          <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;K&quot;</span>
+        <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
 </code></pre>
 <p>Each exported spreadsheet is targeted by a property identified by its name, and includes one array of objects defining the named ranges to be created. The full syntax for the named range object looks like this:</p>
-<pre><code class="lang-json">{
-    <span class="hljs-string">"Name"</span>: <span class="hljs-keyword">range</span><span class="hljs-symbol">'s</span> name,
-    <span class="hljs-string">"Context"</span>: the value Worksheet <span class="hljs-keyword">or</span> Workbook (see below),
-    <span class="hljs-string">"FirstColumn"</span>: the letter <span class="hljs-keyword">of</span> the column starting the <span class="hljs-keyword">range</span>,
-    <span class="hljs-string">"LastColumn"</span>: the letter ending the <span class="hljs-keyword">range</span> (see below),
-    <span class="hljs-string">"IncludeHeader"</span>: <span class="hljs-literal">true</span> <span class="hljs-keyword">or</span> <span class="hljs-literal">false</span> (see below)
-}
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> range&#x27;s name<span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> the value Worksheet or Workbook (see below)<span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> the letter of the column starting the range<span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> the letter ending the range (see below)<span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;IncludeHeader&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span> or <span class="hljs-keyword">false</span> (see below)
+<span class="hljs-punctuation">}</span>
 </code></pre>
-<p>For <strong>Context</strong>, Worksheet means the range is defined at the worksheet level and you&#39;ll need to refer to it as <em>sheetname!range-name</em>. Workbook means the range is defined at the workbook level, and doesn&#39;t require a prefix to be referenced.</p>
+<p>For <strong>Context</strong>, Worksheet means the range is defined at the worksheet level and you'll need to refer to it as <em>sheetname!range-name</em>. Workbook means the range is defined at the workbook level, and doesn't require a prefix to be referenced.</p>
 <p><strong>LastColumn</strong> is optional. If omitted, the named range will be one column wide (i.e., the last column will be the same as the first).</p>
-<p><strong>IncludeHeader</strong> controls whether or not the header row is included in the named range. By default it&#39;s false and the header is <em>not</em> included.</p>
+<p><strong>IncludeHeader</strong> controls whether or not the header row is included in the named range. By default it's false and the header is <em>not</em> included.</p>
 <h2 id="creating-the-required-files">Creating the Required Files</h2>
 <p><strong>WpFormsSurveyProcessor</strong> requires at least a definition of the WpForms objects to display information about the forms. To export data, however, it also requires the user submissions. Both of these files can be exported from the database used by you WordPress website.</p>
-<p>There are various ways to do this, depending on how comfortable you are with directly accessing that database. However, the simpler approach is to use <strong>PhpMyAdmin</strong>, if it&#39;s available for your site. These directions use that approach.</p>
+<p>There are various ways to do this, depending on how comfortable you are with directly accessing that database. However, the simpler approach is to use <strong>PhpMyAdmin</strong>, if it's available for your site. These directions use that approach.</p>
 <h3 id="creating-the-forms-definition-file">Creating the Forms Definition File</h3>
 <p>Navigate to the <em>wp_posts</em> table, which WordPress uses to contain all of the posts in your site, which includes the definitions of your WPForms forms.</p>
-<p><img src="assets/nav2wpposts.png" alt="navigate to wp_posts"></p>
+<p><img src="file:///c:\Programming\WPFormsSurveyProcessor\WPFormsSurveyProcessor\docs\assets\nav2wpposts.png" alt="navigate to wp_posts"></p>
 <p>The wp_posts table contains entries like the following:</p>
-<p><img src="assets/posts.png" alt="wp_posts entries"></p>
-<p>You could simply export this entire file and process it. But it&#39;s likely to be quite large, so a better way is to extract only the posts created by WPForms. You can do that by clicking on the <strong>SQL</strong> tab at the top of the right-hand pane and modifying the default filter condition. After making the change, click the Go button:</p>
-<p><img src="assets/filter-posts.png" alt="filtering posts"></p>
+<p><img src="file:///c:\Programming\WPFormsSurveyProcessor\WPFormsSurveyProcessor\docs\assets\posts.png" alt="wp_posts entries"></p>
+<p>You could simply export this entire file and process it. But it's likely to be quite large, so a better way is to extract only the posts created by WPForms. You can do that by clicking on the <strong>SQL</strong> tab at the top of the right-hand pane and modifying the default filter condition. After making the change, click the Go button:</p>
+<p><img src="file:///c:\Programming\WPFormsSurveyProcessor\WPFormsSurveyProcessor\docs\assets\filter-posts.png" alt="filtering posts"></p>
 <p>Now click the <strong>Export</strong> tab at the top of the right-hand pane, select JSON as the output format, and click the Go button.</p>
-<p><img src="assets/export-json.png" alt="export JSON"></p>
-<p>You can also format the JSON in human-friendly form if you want to, although that&#39;s not required.</p>
+<p><img src="file:///c:\Programming\WPFormsSurveyProcessor\WPFormsSurveyProcessor\docs\assets\export-json.png" alt="export JSON"></p>
+<p>You can also format the JSON in human-friendly form if you want to, although that's not required.</p>
 <p>The export generates a file you download and save someplace where <strong>WpFormsSurveyProcessor</strong> can access it.</p>
 <h3 id="creating-the-user-entries-file">Creating the User Entries File</h3>
 <p>Navigate to the <em>wp_wpforms_entries</em> table, which WPForms uses to contain survey responses. It will look something like this:</p>
-<p><img src="assets/survey-entries.png" alt="user entries"></p>
-<p>As with the wp_forms table, you can export this entire table and process it. But if you only want the information for one or a few surveys it&#39;s worth filtering the table before exporting it. You do this by changing the WHERE condition on the SQL tab in the right-hand pane:</p>
-<p><img src="assets/filter-responses.png" alt="filtering user entries"></p>
+<p><img src="file:///c:\Programming\WPFormsSurveyProcessor\WPFormsSurveyProcessor\docs\assets\survey-entries.png" alt="user entries"></p>
+<p>As with the wp_forms table, you can export this entire table and process it. But if you only want the information for one or a few surveys it's worth filtering the table before exporting it. You do this by changing the WHERE condition on the SQL tab in the right-hand pane:</p>
+<p><img src="file:///c:\Programming\WPFormsSurveyProcessor\WPFormsSurveyProcessor\docs\assets\filter-responses.png" alt="filtering user entries"></p>
 <p>The rest of the export process mimics what was described for creating the forms definition file: select JSON as the export format, click Export, and save the downloaded file someplace where <strong>WpFormsSurveyProcess</strong> can access it.</p>
-</body></html>
+
+        
+        
+    </body>
+    </html>

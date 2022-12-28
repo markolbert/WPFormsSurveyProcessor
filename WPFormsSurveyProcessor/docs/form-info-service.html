@@ -1,9 +1,52 @@
-<html><head><style>body {
-   color: black;
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Form Information Service</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
 }
-</style></head><body><h1 id="form-information-service">Form Information Service</h1>
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="form-information-service">Form Information Service</h1>
 <p>This service parses a JSON-formatted file of WordPress posts and displays the WPForms forms and their ids contained in the file. All posts other than those defined by WPForms are ignored. All WPForms form definitions, whether or not they are for surveys, are included.</p>
 <p>The files are assumed to have been exported by PHPMyAdmin, which creates download files structured in a particular way.</p>
 <p>The service works by calling the <code>ParseFile()</code> method on an instance of <code>WpFormsParser</code>, supplying the path defined on the command line with the <strong>/p</strong> or <strong>/posts</strong> option.</p>
-<p>For more information on <code>WpFormsParser</code>, consult its <a href="https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.md">github repository</a>.</p>
-</body></html>
+<p>For more information on <code>WpFormsParser</code>, consult its <a href="https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.html">github repository</a>.</p>
+
+        
+        
+    </body>
+    </html>

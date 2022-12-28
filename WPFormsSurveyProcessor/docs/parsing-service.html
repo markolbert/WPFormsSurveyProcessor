@@ -1,7 +1,46 @@
-<html><head><style>body {
-   color: black;
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Parsing and Exporting Service</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
 }
-</style></head><body><h1 id="parsing-and-exporting-service">Parsing and Exporting Service</h1>
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="parsing-and-exporting-service">Parsing and Exporting Service</h1>
 <p>Exporting to Excel is handled by a C# <a href="https://github.com/nissl-lab/npoi">NPOI library</a>. That library creates the Excel workbook and worksheets in memory and then allows you to write the result to an .xlsx file.</p>
 <ul>
 <li><a href="#parsing-the-files">Parsing the Files</a></li>
@@ -17,11 +56,15 @@
 <p>The files are assumed to have been exported by PHPMyAdmin, which creates download files structured in a particular way.</p>
 <p>The service first parses the WordPress posts file to determine the WPForms form definitions. It does that by calling the <code>ParseFile()</code> method on an instance of <code>WpFormsParser</code>, supplying the path defined on the command line with the <strong>/p</strong> or <strong>/posts</strong> option.</p>
 <p>Next, the service parses the WPForms entries file to determine the user survey responses. It does that by calling the <code>ParseFile()</code> method on an instance of <code>WpResponsesParser</code>, supplying the path defined on the command line with the <strong>/e</strong> or <strong>/entries</strong> option.</p>
-<p>For more information on <code>WpFormsParser</code> and <code>WpResponsesParser</code>, consult their <a href="https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.md">github repository</a>.</p>
+<p>For more information on <code>WpFormsParser</code> and <code>WpResponsesParser</code>, consult their <a href="https://github.com/markolbert/WPFormsSurveyProcessor/blob/master/WpFormsSurvey/docs/readme.html">github repository</a>.</p>
 <h2 id="exporting-to-excel">Exporting to Excel</h2>
 <p>Once the form definitions and survey responses have been parsed, one or more exporters are called to create specific spreadsheets in an Excel .xlsx file. The exporters all derive from <code>ExportBase</code>, a generic base class defining a number of methods to create and format tabular data and named ranges in an Excel spreadsheet.</p>
 <p>Each derived exporter class overrides the <code>GetRecords()</code> abstract method to create an instance of the data needed for each row of the data table being created. Rows are created based on those instances in the overriden <code>ProcessRecord()</code> method.</p>
 <p>The entire export/table creation process is wrapped by two other methods, <code>StartExport()</code> and <code>FinishExport()</code>.</p>
 <p>The overridden <code>StartExport()</code> methods typically create the header row for each table, although they can do other initialization work as well.</p>
 <p>The overridden <code>FinishExport()</code> methods typically autosize one or more table columns and create whatever named ranges were defined for their spreadsheet in the <code>appConfig.json</code> file.</p>
-</body></html>
+
+        
+        
+    </body>
+    </html>
