@@ -2,7 +2,7 @@
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 public abstract class ExportBase<TEntity>
     where TEntity : class

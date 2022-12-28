@@ -1,12 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 using J4JSoftware.Configuration.CommandLine;
 using J4JSoftware.DependencyInjection;
-using J4JSoftware.DeusEx;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal partial class DeusEx : J4JDeusExHosted
 {

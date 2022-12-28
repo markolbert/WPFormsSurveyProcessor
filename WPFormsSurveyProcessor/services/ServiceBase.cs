@@ -1,7 +1,7 @@
 ﻿using J4JSoftware.Logging;
 using Microsoft.Extensions.Hosting;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal class ServiceBase : IHostedService
 {

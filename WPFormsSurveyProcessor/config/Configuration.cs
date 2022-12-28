@@ -1,6 +1,6 @@
 ﻿using J4JSoftware.Utilities;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 public class Configuration
 {

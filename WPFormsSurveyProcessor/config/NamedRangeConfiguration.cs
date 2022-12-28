@@ -1,4 +1,4 @@
-﻿namespace WPFormsSurveyProcessor;
+﻿namespace J4JSoftware.WpFormsSurvey;
 
 public class NamedRangeConfiguration
 {

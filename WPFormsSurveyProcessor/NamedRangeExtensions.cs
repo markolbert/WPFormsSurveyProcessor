@@ -1,14 +1,8 @@
 ﻿using NPOI.SS.UserModel;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using J4JSoftware.Logging;
-using System.Xml.Linq;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal static class NamedRangeExtensions
 {

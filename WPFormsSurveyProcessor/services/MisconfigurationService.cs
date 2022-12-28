@@ -3,7 +3,7 @@ using J4JSoftware.Configuration.J4JCommandLine;
 using J4JSoftware.Logging;
 using Serilog.Events;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal class MisconfigurationService : ServiceBase
 {

@@ -1,8 +1,7 @@
 ﻿using J4JSoftware.Logging;
 using NPOI.XSSF.UserModel;
-using WpFormsSurvey;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal class ExportChoiceFields : ExportSurveyBase<ChoiceFieldInfo>
 {

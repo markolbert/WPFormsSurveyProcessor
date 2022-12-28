@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 [WpFormsFieldType("file-upload")]
 public class FileUploadField : LabeledField

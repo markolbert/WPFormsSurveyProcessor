@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 public class WpDateTimeConverter : JsonConverter<DateTime>
 {
     public override DateTime Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )

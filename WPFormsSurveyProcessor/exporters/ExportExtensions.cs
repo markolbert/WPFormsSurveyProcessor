@@ -1,7 +1,7 @@
 ﻿using J4JSoftware.Logging;
 using NPOI.SS.UserModel;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 public static class ExportExtensions
 {

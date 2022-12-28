@@ -1,6 +1,6 @@
 ﻿using J4JSoftware.Configuration.CommandLine;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal partial class DeusEx
 {

@@ -1,6 +1,6 @@
 using System.Text;
 using FluentAssertions;
-using WpFormsSurvey;
+using J4JSoftware.WpFormsSurvey;
 
 namespace Test.Parsing;
 

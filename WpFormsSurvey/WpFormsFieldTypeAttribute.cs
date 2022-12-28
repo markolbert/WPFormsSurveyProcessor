@@ -1,4 +1,4 @@
-﻿namespace WpFormsSurvey;
+﻿namespace J4JSoftware.WpFormsSurvey;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 public class WpFormsFieldTypeAttribute : Attribute

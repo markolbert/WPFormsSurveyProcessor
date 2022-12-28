@@ -2,7 +2,7 @@
 using J4JSoftware.Configuration.J4JCommandLine;
 using J4JSoftware.Logging;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal class HelpService : ServiceBase
 {

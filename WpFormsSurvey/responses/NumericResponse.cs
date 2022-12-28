@@ -1,4 +1,4 @@
-﻿namespace WpFormsSurvey;
+﻿namespace J4JSoftware.WpFormsSurvey;
 
 [WpFormsFieldType("number-slider")]
 public class NumericResponse : ResponseBase

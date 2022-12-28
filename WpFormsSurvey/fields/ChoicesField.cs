@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 [WpFormsFieldType("select")]
 [WpFormsFieldType("radio")]

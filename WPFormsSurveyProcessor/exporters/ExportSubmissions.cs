@@ -1,9 +1,8 @@
 ﻿using System.Text;
 using J4JSoftware.Logging;
 using NPOI.SS.UserModel;
-using WpFormsSurvey;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
 {

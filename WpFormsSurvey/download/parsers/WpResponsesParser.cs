@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using J4JSoftware.Logging;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 public record IndividualResponse( int FormId, int FieldId, ResponseBase Response );
 

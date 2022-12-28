@@ -1,4 +1,4 @@
-﻿namespace WpFormsSurvey;
+﻿namespace J4JSoftware.WpFormsSurvey;
 
 public static class FormsSurveyExtensions
 {

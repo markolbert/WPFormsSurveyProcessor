@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 public record FieldsContent( JsonElement Fields );

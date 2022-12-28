@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 public class JsonField
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using NPOI.SS.UserModel;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 public class CustomStyles : KeyedCollection<string, CustomStyles.Style>
 {

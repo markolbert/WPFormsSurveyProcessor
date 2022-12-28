@@ -1,6 +1,6 @@
 ﻿using J4JSoftware.Logging;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal abstract class ExportSurveyBase<TEntity> : ExportBase<TEntity>
     where TEntity : class

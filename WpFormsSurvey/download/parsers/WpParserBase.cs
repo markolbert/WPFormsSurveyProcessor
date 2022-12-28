@@ -2,7 +2,7 @@
 using System.Text.Json;
 using J4JSoftware.Logging;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 public class WpParserBase<TEntity>
     where TEntity : class

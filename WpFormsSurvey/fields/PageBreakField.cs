@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WpFormsSurvey;
+namespace J4JSoftware.WpFormsSurvey;
 
 [WpFormsFieldType("pagebreak")]
 public class PageBreakField : FieldBase

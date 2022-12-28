@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using J4JSoftware.Logging;
 
-namespace WPFormsSurveyProcessor;
+namespace J4JSoftware.WpFormsSurvey;
 
 internal class DocumentationService : ServiceBase
 {
