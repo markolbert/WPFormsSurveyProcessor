@@ -21,8 +21,6 @@ using J4JSoftware.Logging;
 
 namespace J4JSoftware.WpFormsSurvey;
 
-public record IndividualResponse( int FormId, int FieldId, ResponseBase Response );
-
 public class WpResponsesParser : WpParserBase<ResponseBase>
 {
     public WpResponsesParser(
