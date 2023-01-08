@@ -52,7 +52,7 @@ internal class ParseService : ServiceBase
 
     public override Task StartAsync( CancellationToken cancellationToken )
     {
-        if( !Configuration.ExcelFileInfo.CanBeWritten )
+        if( !Configuration.ExcelFileInfo.IsValid() )
         {
             Logger.Error("Cannot create or write to the Excel file path");
             return Task.CompletedTask;
@@ -110,11 +110,12 @@ internal class ParseService : ServiceBase
         && !ExportSubmissions( workbook, new SubmissionInfo( formDefinitions, individualSubmissions ) ) )
             return Task.CompletedTask;
 
+        if( !Configuration.ExcelFileInfo.GetTimeStampedPath(Configuration.EntriesFilePath, out var excelPath))
+            return Task.CompletedTask;
+
         try
         {
-            using var fileStream = File.Create( Configuration.ExcelFileInfo
-                                                             .GetTimeStampedPath( Configuration.EntriesFilePath ) );
-
+            using var fileStream = File.Create( excelPath! );
             Logger.Information<string>( "Writing results to {0}", fileStream.Name );
 
             workbook.Write( fileStream );
