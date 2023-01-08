@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU General Public License along 
 // with WpFormsSurveyProcessor. If not, see <https://www.gnu.org/licenses/>.
 
+using J4JSoftware.DependencyInjection;
 using J4JSoftware.DeusEx;
 using J4JSoftware.Logging;
-using J4JSoftware.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Core;
 using Serilog.Events;
