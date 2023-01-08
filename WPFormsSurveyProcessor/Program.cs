@@ -34,6 +34,10 @@ internal class Program
             return;
         }
 
+        // set logging level
+        var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
+        Configuration.LoggingLevelSwitch.MinimumLevel = config.LogEventLevel;
+
         var service = GetService();
 
         var cancellationTokenSrc = new CancellationTokenSource();
@@ -44,7 +48,7 @@ internal class Program
     {
         var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
 
-        if (config.Errors != null)
+        if( !config.IsValid() )
             return J4JDeusEx.ServiceProvider.GetRequiredService<MisconfigurationService>();
 
         if (config.DisplayFormInfo)

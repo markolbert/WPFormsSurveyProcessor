@@ -41,14 +41,6 @@ internal class MisconfigurationService : ServiceBase
         var help = new ColorHelpDisplay(new WindowsLexicalElements(Logger), _options);
         help.Display();
 
-        if ( Configuration.Errors == null )
-            return Task.CompletedTask;
-
-        foreach (var error in Configuration.Errors)
-        {
-            Logger.Write(LogEventLevel.Fatal, error);
-        }
-
         Environment.ExitCode = 1;
 
         return Task.CompletedTask;

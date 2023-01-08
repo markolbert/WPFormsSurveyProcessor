@@ -15,72 +15,38 @@
 // You should have received a copy of the GNU General Public License along 
 // with WpFormsSurveyProcessor. If not, see <https://www.gnu.org/licenses/>.
 
+using J4JSoftware.DeusEx;
+using J4JSoftware.Logging;
 using J4JSoftware.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace J4JSoftware.WpFormsSurvey;
 
 public class ExcelFileInfo
 {
-    private string _fileName = "Survey Results.xlsx";
-    private string _directory = Environment.CurrentDirectory;
+    public const string DefaultFileName = "Survey Results.xlsx";
+
+    private readonly IJ4JLogger _logger;
+
+    public ExcelFileInfo()
+    {
+        _logger = J4JDeusEx.ServiceProvider.GetRequiredService<IJ4JLogger>();
+        _logger.SetLoggedType( GetType() );
+
+        _logger.Verbose( "Initialized logger in ExcelFileInfo" );
+    }
 
     public Exporters InformationToExport { get; set; } = Exporters.All;
     public NamedRangeConfigurations RangeConfigurations { get; set; } = new();
 
-    public string FileName
+    public string ExcelPath { get; set; } = DefaultFileName;
+
+    public bool GetTimeStampedPath( string pathToEntriesFile, out string? result )
     {
-        get => _fileName;
+        result = null;
+        if( !IsValid() )
+            return false;
 
-        set
-        {
-            var newName = Path.EndsInDirectorySeparator( value )
-                ? $"{value}Survey Results.xlsx"
-                : string.IsNullOrEmpty(value) 
-                    ? "Survey Results.xlsx" 
-                    : $"{Path.GetFileNameWithoutExtension(value)}.xlsx";
-
-            CanBeWritten = FileExtensions.ValidateFilePath( newName, out var temp, ".xlsx", requireWriteAccess: true );
-
-            if( string.IsNullOrEmpty( temp ) )
-            {
-                _fileName = newName;
-                _directory = Environment.CurrentDirectory;
-            }
-            else
-            {
-                _fileName = Path.GetFileName( temp );
-
-                var tempDir = Path.GetDirectoryName( temp );
-                if( !string.IsNullOrEmpty( tempDir ) )
-                    _directory = tempDir;
-            }
-        }
-    }
-
-    public string Directory
-    {
-        get => _directory;
-
-        set
-        {
-            var filePath = Path.Combine( value, _fileName );
-            CanBeWritten = FileExtensions.ValidateFilePath(filePath, out var temp, ".xlsx", requireWriteAccess: true);
-
-            if( string.IsNullOrEmpty( temp ) )
-            {
-                _fileName = "Survey Results.xlsx";
-                _directory = Environment.CurrentDirectory;
-            }
-            else
-            {
-                _fileName = Path.GetFileName( temp );
-                _directory = Path.GetDirectoryName( temp ) ?? Environment.CurrentDirectory;
-            }
-        }
-    }
-
-    public string GetTimeStampedPath( string pathToEntriesFile )
-    {
         var dtCreation = DateTime.Now;
 
         try
@@ -93,20 +59,45 @@ public class ExcelFileInfo
         {
         }
 
-        return TimeStamp switch
+        result= TimeStamp switch
         {
-            ExcelTimeStamp.DateOnly => Path.Combine( _directory,
-                                                     Path.GetFileNameWithoutExtension( _fileName )
-                                                   + dtCreation.ToString( " yyyy-MM-dd" )
-                                                   + ".xlsx" ),
-            ExcelTimeStamp.DateAndTime => Path.Combine( _directory,
-                                                        Path.GetFileNameWithoutExtension( _fileName )
-                                                      + dtCreation.ToString( " yyyy-MM-dd hh-mm-ss" )
-                                                      + ".xlsx" ),
-            _ => Path.Combine( _directory, _fileName )
+            ExcelTimeStamp.DateOnly => System.IO.Path.Combine( Path.GetDirectoryName(ExcelPath) ?? Environment.CurrentDirectory,
+                                                               Path.GetFileNameWithoutExtension(ExcelPath)
+                                                             + dtCreation.ToString( " yyyy-MM-dd" )
+                                                             + ".xlsx" ),
+            ExcelTimeStamp.DateAndTime => System.IO.Path.Combine( Path.GetDirectoryName(ExcelPath) ?? Environment.CurrentDirectory,
+                                                                  Path.GetFileNameWithoutExtension( ExcelPath )
+                                                                + dtCreation.ToString( " yyyy-MM-dd hh-mm-ss" )
+                                                                + ".xlsx" ),
+            _ => ExcelPath
         };
+
+        return true;
     }
 
     public ExcelTimeStamp TimeStamp { get; set; } = ExcelTimeStamp.DateAndTime;
-    public bool CanBeWritten { get; private set; }
+
+    public bool IsValid()
+    {
+        if( System.IO.Path.EndsInDirectorySeparator( ExcelPath ) )
+        {
+            ExcelPath = $"{ExcelPath}{DefaultFileName}";
+            _logger.Information<string>("Added {0} to Excel file path", DefaultFileName);
+        }
+        else
+        {
+            if( string.IsNullOrEmpty( ExcelPath ) )
+            {
+                ExcelPath = DefaultFileName;
+                _logger.Information<string>("Changed Excel file name to {0}", DefaultFileName);
+            }
+        }
+
+        return FileExtensions.ValidateFilePath(ExcelPath,
+                                                  out var temp,
+                                                  ".xlsx",
+                                                  requireWriteAccess: true,
+                                                  logger: _logger);
+    }
+
 }
