@@ -14,13 +14,13 @@
 	  <Copyright>© Mark A. Olbert all rights reserved</Copyright>
 	  <RepositoryUrl>https://github.com/markolbert/WPFormsSurveyProcessor</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>1.1.0.0</Version>
-	  <AssemblyVersion>1.1.0.0</AssemblyVersion>
+	  <Version>1.1.1.0</Version>
+	  <AssemblyVersion>1.1.1.0</AssemblyVersion>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
 	  <PackageDescription>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</PackageDescription>
 	  <PackageIcon>Diego nuspec.png</PackageIcon>
-	  <PackageReleaseNotes>fixed bugs, added log level to be specified</PackageReleaseNotes>
+	  <PackageReleaseNotes>fix bug caused by ignoring app config file</PackageReleaseNotes>
 	  <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 

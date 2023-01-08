@@ -2,6 +2,7 @@
 
 |Version|Description|
 |:-----:|-----------|
+|1.1.1|fixed bug causing app config file to be ignored|
 |1.1.0|fix bugs, add new command line option; [see details below](#110)|
 |1.0.0|initial release|
 

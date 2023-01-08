@@ -32,6 +32,7 @@ internal partial class DeusEx : J4JDeusExHosted
         var hostConfig = new J4JHostConfiguration( AppEnvironment.Console )
                         .ApplicationName( "WpFormsSurveyProcessor" )
                         .Publisher( "Jump for Joy Software" )
+                        .AddApplicationConfigurationFile("appConfig.json", false)
                         .LoggerInitializer( ConfigureLogging )
                         .AddDependencyInjectionInitializers( ConfigureDependencyInjection )
                         .FilePathTrimmer( FilePathTrimmer );
