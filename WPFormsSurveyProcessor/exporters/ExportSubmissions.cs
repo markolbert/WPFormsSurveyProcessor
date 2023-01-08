@@ -170,11 +170,12 @@ internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
     {
         AutoSizeColumns();
 
-        if (RangeConfigurations?.Submissions != null)
-            Worksheet!.CreateWorksheetNamedRanges(RangeConfigurations.Submissions,
-                                                  RecordNumber + 1,
-                                                  out _,
-                                                  Logger);
+        if( RangeConfigurations?.Submissions != null )
+            Worksheet!.CreateWorksheetNamedRanges( RangeConfigurations.Submissions,
+                                                   RecordNumber + 1,
+                                                   out _,
+                                                   Logger );
+        else Logger.Verbose( "No named ranges defined" );
 
         Logger.Information("    ...done");
         return true;

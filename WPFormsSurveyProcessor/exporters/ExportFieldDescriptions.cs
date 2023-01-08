@@ -80,6 +80,7 @@ internal class ExportFieldDescriptions : ExportSurveyBase<FieldDescription>
                                                   RecordNumber + 1,
                                                   out _,
                                                   Logger);
+        else Logger.Verbose("No named ranges defined");
 
         Logger.Information("    ...done");
         return true;
