@@ -21,6 +21,7 @@ using J4JSoftware.DependencyInjection;
 using J4JSoftware.Logging;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Events;
 
 namespace J4JSoftware.WpFormsSurvey;
 
@@ -49,6 +50,7 @@ internal partial class DeusEx : J4JDeusExHosted
     )
     {
         loggerConfig.SerilogConfiguration
+                    .MinimumLevel.ControlledBy(Configuration.LoggingLevelSwitch)
                     .WriteTo.Debug()
                     .WriteTo.Console();
     }
