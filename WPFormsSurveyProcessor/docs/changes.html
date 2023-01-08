@@ -50,11 +50,18 @@
 </thead>
 <tbody>
 <tr>
+<td style="text-align:center">1.1.0</td>
+<td>fix bugs, add new command line option; <a href="#110">see details below</a></td>
+</tr>
+<tr>
 <td style="text-align:center">1.0.0</td>
 <td>initial release</td>
 </tr>
 </tbody>
 </table>
+<h2 id="110">1.1.0</h2>
+<p>Fixed a bug in how the application configuration file was being located at runtime.</p>
+<p>Added a new command line option, /l, to enable specifying the logging level used to display messages. Acceptable values are the enumerated values for <a href="https://github.com/serilog/serilog/blob/main/src/Serilog/Events/LogEventLevel.cs">Serilog's log event level</a>. The default is Warning.</p>
 
         
         

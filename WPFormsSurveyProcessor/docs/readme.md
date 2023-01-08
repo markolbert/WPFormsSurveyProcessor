@@ -31,6 +31,7 @@ The option flags are case insensitive.
 |:----:|-----------|
 |/h, /help|Display simple help information|
 |/d, /docs|Display this documentation in a browser|
+|/l, /logLevel|Adjust the minimum level of logging events displayed to the console. The default is Warning.|
 |/c, /config|Path to the application configuration file. If not specified, the default *appConfig.json* file in the application directory is used|
 |/p, /posts|Path to the file containing the WordPress posts. This is where WpForms stores form definitions. See below for details on creating this file.|
 |/e, /entries|Path to the file containing the WpForms user entries. See below for details on creating this file.|
