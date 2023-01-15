@@ -15,8 +15,11 @@
 // You should have received a copy of the GNU General Public License along 
 // with WpFormsSurveyProcessor. If not, see <https://www.gnu.org/licenses/>.
 
+using J4JSoftware.DependencyInjection;
 using J4JSoftware.Logging;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Org.BouncyCastle.Math.EC;
 
 namespace J4JSoftware.WpFormsSurvey;
 
@@ -27,7 +30,7 @@ internal class ParseService : ServiceBase
     private readonly ExportFormInfo _formInfoExporter;
     private readonly ExportChoiceFields _choiceFieldsExporter;
     private readonly ExportFieldDescriptions _fieldDescriptionsExporter;
-    private readonly ExportSubmissions _submissionsExporter;
+    private readonly ExportResponses _responsesExporter;
 
     public ParseService(
         Configuration config,
@@ -36,7 +39,7 @@ internal class ParseService : ServiceBase
         ExportFormInfo formInfoExporter,
         ExportChoiceFields choiceFieldsExporter,
         ExportFieldDescriptions fieldDescriptionsExporter,
-        ExportSubmissions submissionsExporter,
+        ExportResponses responsesExporter,
         IJ4JLogger logger
     )
         : base(config, logger)
@@ -47,20 +50,22 @@ internal class ParseService : ServiceBase
         _formInfoExporter = formInfoExporter;
         _choiceFieldsExporter = choiceFieldsExporter;
         _fieldDescriptionsExporter = fieldDescriptionsExporter;
-        _submissionsExporter = submissionsExporter;
+        _responsesExporter = responsesExporter;
     }
 
     public override Task StartAsync( CancellationToken cancellationToken )
     {
-        if( !Configuration.ExcelFileInfo.IsValid() )
+        if( Configuration.Workbook == null )
         {
-            Logger.Error("Cannot create or write to the Excel file path");
+            Logger.Error("Workbook is not configured");
             return Task.CompletedTask;
         }
 
         var formsDownload = ParseForms();
         if( formsDownload?.Data is not {} formDefinitions )
             return Task.CompletedTask;
+
+        Logger.Information("Parsed forms definition(s)");
 
         if( Configuration.FormIds.Any() )
         {
@@ -76,53 +81,52 @@ internal class ParseService : ServiceBase
         }
 
         var responsesDownload = ParseResponses();
-        if( responsesDownload?.Data is not {} individualSubmissions )
+        if( responsesDownload?.Data is not {} individualResponses )
             return Task.CompletedTask;
 
-        if( Configuration.FormIds.Any() )
+        Logger.Information("Parsed user responses");
+
+        if ( Configuration.FormIds.Any() )
         {
-            individualSubmissions = individualSubmissions
+            individualResponses = individualResponses
                                    .Where( x => Configuration.FormIds.Any( y => x.FormId == y ) )
                                    .ToList();
 
-            if( !individualSubmissions.Any() )
+            if( !individualResponses.Any() )
             {
                 Logger.Warning( "No submissions(s) with that/those form ids were found" );
                 return Task.CompletedTask;
             }
         }
 
-        var workbook = new XSSFWorkbook( XSSFWorkbookType.XLSX );
-
-        if( ( Configuration.ExcelFileInfo.InformationToExport & Exporters.FormInformation ) == Exporters.FormInformation
-        && !ExportFormInfo( workbook, formDefinitions ) )
+        if( ( Configuration.InformationToExport & Exporters.FormInformation ) == Exporters.FormInformation
+        && !ExportFormInfo( formDefinitions ) )
             return Task.CompletedTask;
 
-        if( ( Configuration.ExcelFileInfo.InformationToExport & Exporters.FieldDescriptions ) == Exporters.FieldDescriptions
-        && !ExportFieldDescriptions( workbook, formDefinitions ) )
+        if( ( Configuration.InformationToExport & Exporters.FieldDescriptions ) == Exporters.FieldDescriptions
+        && !ExportFieldDescriptions( formDefinitions ) )
             return Task.CompletedTask;
 
-        if( ( Configuration.ExcelFileInfo.InformationToExport & Exporters.ChoiceFields ) == Exporters.ChoiceFields
-        && !ExportChoiceFields( workbook, formDefinitions ) )
+        if( ( Configuration.InformationToExport & Exporters.ChoiceFields ) == Exporters.ChoiceFields
+        && !ExportChoiceFields( formDefinitions ) )
             return Task.CompletedTask;
 
-        if( ( Configuration.ExcelFileInfo.InformationToExport & Exporters.Submissions ) == Exporters.Submissions
-        && !ExportSubmissions( workbook, new SubmissionInfo( formDefinitions, individualSubmissions ) ) )
+        if( ( Configuration.InformationToExport & Exporters.Responses ) == Exporters.Responses
+        && !ExportResponses( new ResponseInfo( formDefinitions, individualResponses ) ) )
             return Task.CompletedTask;
 
-        if( !Configuration.ExcelFileInfo.GetTimeStampedPath(Configuration.EntriesFilePath, out var excelPath))
-            return Task.CompletedTask;
+        Logger.Information<string>("Writing results to {0}", Configuration.ExcelPath);
 
         try
         {
-            using var fileStream = File.Create( excelPath! );
-            Logger.Information<string>( "Writing results to {0}", fileStream.Name );
+            using var fs = File.OpenWrite( Configuration.ExcelPath );
+            Configuration.Workbook!.Write( fs, false );
 
-            workbook.Write( fileStream );
-            fileStream.Close();
+            Logger.Information("Done");
         }
         catch( IOException ioException )
         {
+            var temp = FileLocking.WhoIsLocking( Configuration.ExcelPath );
             Logger.Error( ioException.Message );
         }
 
@@ -149,9 +153,9 @@ internal class ParseService : ServiceBase
         return null;
     }
 
-    private bool ExportFormInfo(XSSFWorkbook workbook, List<Form> formDefinitions)
+    private bool ExportFormInfo(List<Form> formDefinitions)
     {
-        _formInfoExporter.Initialize(workbook, "form_info", formDefinitions);
+        _formInfoExporter.Initialize("form_info", formDefinitions);
 
         if (_formInfoExporter.Initialized)
             return _formInfoExporter.ExportData();
@@ -160,9 +164,10 @@ internal class ParseService : ServiceBase
         return false;
     }
 
-    private bool ExportChoiceFields(XSSFWorkbook workbook, List<Form> formDefinitions)
+    private bool ExportChoiceFields(List<Form> formDefinitions)
     {
-        _choiceFieldsExporter.Initialize(workbook, "choice_fields", formDefinitions);
+        _choiceFieldsExporter.Initialize("choice_fields", formDefinitions);
+
         if (_choiceFieldsExporter.Initialized)
             return _choiceFieldsExporter.ExportData();
 
@@ -170,9 +175,10 @@ internal class ParseService : ServiceBase
         return false;
     }
 
-    private bool ExportFieldDescriptions(XSSFWorkbook workbook, List<Form> formDefinitions)
+    private bool ExportFieldDescriptions(List<Form> formDefinitions)
     {
-        _fieldDescriptionsExporter.Initialize(workbook, "fields", formDefinitions);
+        _fieldDescriptionsExporter.Initialize("fields", formDefinitions);
+
         if (_fieldDescriptionsExporter.Initialized)
             return _fieldDescriptionsExporter.ExportData();
 
@@ -180,11 +186,12 @@ internal class ParseService : ServiceBase
         return false;
     }
 
-    private bool ExportSubmissions( XSSFWorkbook workbook, SubmissionInfo submissionInfo )
+    private bool ExportResponses( ResponseInfo responseInfo )
     {
-        _submissionsExporter.Initialize(workbook, "responses", submissionInfo);
-        if (_submissionsExporter.Initialized)
-            return _submissionsExporter.ExportData();
+        _responsesExporter.Initialize("responses", responseInfo);
+
+        if (_responsesExporter.Initialized)
+            return _responsesExporter.ExportData();
 
         Logger.Error("Failed to initialize submissions exporter");
         return false;
