@@ -1,4 +1,73 @@
 {
+  "WorksheetDefinitions": [
+    {
+      "SheetType": "Forms",
+      "SheetName": "forms",
+      "Ranges": [
+        {
+          "Name": "FormIds",
+          "Context": "Worksheet",
+          "FirstColumn": "A"
+        },
+        {
+          "Name": "FormNames",
+          "Context": "Worksheet",
+          "FirstColumn": "A",
+          "LastColumn": "B"
+        }
+      ]
+    },
+    {
+      "SheetType": "Fields",
+      "SheetName": "fields",
+      "Ranges": [
+        {
+          "Name": "Fields",
+          "Context": "Worksheet",
+          "FirstColumn": "C",
+          "LastColumn": "E"
+        }
+      ]
+    },
+    {
+      "SheetType": "Choices",
+      "SheetName": "choices",
+      "Ranges": [
+        {
+          "Name": "Choices",
+          "Context": "Worksheet",
+          "FirstColumn": "E",
+          "LastColumn": "F"
+        }
+      ]
+    },
+    {
+      "SheetType": "Responses",
+      "SheetName": "responses",
+      "Ranges": [
+        {
+          "Name": "FieldKeys",
+          "Context": "Worksheet",
+          "FirstColumn": "H"
+        },
+        {
+          "Name": "SubfieldKeys",
+          "Context": "Worksheet",
+          "FirstColumn": "I"
+        },
+        {
+          "Name": "ResponseIndices",
+          "Context": "Worksheet",
+          "FirstColumn": "J"
+        },
+        {
+          "Name": "Responses",
+          "Context": "Worksheet",
+          "FirstColumn": "K"
+        }
+      ]
+    }
+  ],
   "ExcelFileInfo": {
     "RangeConfigurations": {
       "Forms": [

@@ -34,7 +34,7 @@ internal class FormInfoService : ServiceBase
 
     public override Task StartAsync( CancellationToken cancellationToken )
     {
-        if( Configuration.IsValid() )
+        if( Configuration.FinalizeConfiguration() )
             ParseFormDefinitions();
 
         return Task.CompletedTask;

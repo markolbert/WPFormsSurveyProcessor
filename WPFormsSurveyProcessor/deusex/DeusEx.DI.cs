@@ -37,10 +37,6 @@ internal partial class DeusEx
                .AsSelf()
                .SingleInstance();
 
-        builder.RegisterType<MisconfigurationService>()
-               .AsSelf()
-               .SingleInstance();
-
         builder.RegisterType<HelpService>()
                .AsSelf()
                .SingleInstance();
@@ -69,7 +65,7 @@ internal partial class DeusEx
                .AsSelf()
                .SingleInstance();
 
-        builder.RegisterType<ExportSubmissions>()
+        builder.RegisterType<ExportResponses>()
                .AsSelf()
                .SingleInstance();
 
