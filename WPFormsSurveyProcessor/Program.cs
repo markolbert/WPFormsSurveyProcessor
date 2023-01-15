@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU General Public License along 
 // with WpFormsSurveyProcessor. If not, see <https://www.gnu.org/licenses/>.
 
+using J4JSoftware.Configuration.CommandLine;
+using J4JSoftware.Configuration.J4JCommandLine;
 using J4JSoftware.DeusEx;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +40,18 @@ internal class Program
         var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
         Configuration.LoggingLevelSwitch.MinimumLevel = config.LogEventLevel;
 
+        if( !config.FinalizeConfiguration() )
+        {
+            J4JDeusEx.Logger!.Fatal("Invalid configuration\n");
+
+            var help = new ColorHelpDisplay( new WindowsLexicalElements( J4JDeusEx.Logger ),
+                                             J4JDeusEx.ServiceProvider.GetRequiredService<OptionCollection>() );
+            help.Display();
+
+            Environment.ExitCode = 1;
+            return;
+        }
+
         var service = GetService();
 
         var cancellationTokenSrc = new CancellationTokenSource();
@@ -47,9 +61,6 @@ internal class Program
     private static IHostedService GetService()
     {
         var config = J4JDeusEx.ServiceProvider.GetRequiredService<Configuration>();
-
-        if( !config.IsValid() )
-            return J4JDeusEx.ServiceProvider.GetRequiredService<MisconfigurationService>();
 
         if (config.DisplayFormInfo)
             return J4JDeusEx.ServiceProvider.GetRequiredService<FormInfoService>();
