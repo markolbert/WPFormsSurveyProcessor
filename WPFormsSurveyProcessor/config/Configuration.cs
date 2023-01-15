@@ -59,7 +59,6 @@ public class Configuration : IDisposable
     public bool ExcelFileExists { get; private set; }
     public List<WorksheetInfo> WorksheetDefinitions { get; set; } = new();
     public Exporters InformationToExport { get; set; } = Exporters.All;
-    public string WorksheetSuffix { get; private set; } = string.Empty;
     public IWorkbook? Workbook { get; private set; }
 
     public List<int> FormIds { get; set; } = new();
