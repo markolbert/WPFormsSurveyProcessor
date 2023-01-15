@@ -47,27 +47,42 @@ public abstract class ExportBase<TEntity>
     protected int ReportingInterval { get; }
     protected int RecordNumber { get; private set; }
 
-    protected virtual bool Initialize( IWorkbook workbook, string sheetName )
+    protected virtual bool Initialize( string sheetName )
     {
-        Workbook = workbook;
+        var validatedName = ValidateSheetName( sheetName );
 
-        Worksheet = workbook.GetSheet( sheetName );
-        if( Worksheet != null )
-        {
-            Logger.Warning<string>("Replacing existing spreadsheet '{0}'", sheetName  );
-            var idx = workbook.GetSheetIndex( sheetName );
-            workbook.RemoveSheetAt( idx );
-        }
-
-        Worksheet = workbook.CreateSheet(sheetName);
+        Worksheet = Workbook.CreateSheet( validatedName );
         if( Worksheet != null )
             return true;
 
-        Logger.Error<string>("Could not create worksheet '{0}'", sheetName);
+        Logger.Error<string>( "Could not create worksheet '{0}'", validatedName );
         return false;
     }
 
-    public IWorkbook? Workbook { get; private set; }
+    private string ValidateSheetName( string sheetName )
+    {
+        var sheetNames = new List<string>();
+
+        for (var sheetIdx = 0; sheetIdx < Workbook.NumberOfSheets; sheetIdx++)
+        {
+            var curSheetName = Workbook.GetSheetName(sheetIdx) ?? string.Empty;
+            if (!string.IsNullOrEmpty(curSheetName))
+                sheetNames.Add(curSheetName);
+        }
+
+        var suffix = 1;
+
+        while( sheetNames.Any( x => x.Equals( $"{sheetName}{NumToText()}" ) ) )
+        {
+            suffix++;
+        }
+
+        return $"{sheetName}{NumToText()}";
+
+        string NumToText() => suffix <= 1 ? string.Empty : suffix.ToString();
+    }
+
+    protected abstract IWorkbook Workbook { get; }
 
     public ISheet? Worksheet
     {
@@ -83,7 +98,7 @@ public abstract class ExportBase<TEntity>
     }
 
     public string? SheetName => Worksheet?.SheetName;
-    public int SheetIndex => Workbook?.GetSheetIndex( SheetName ) ?? -1;
+    public int SheetIndex => Workbook.GetSheetIndex( SheetName );
     public CustomStyles? Styles { get; set; }
 
     public virtual bool Initialized => Worksheet != null;
@@ -383,19 +398,19 @@ public abstract class ExportBase<TEntity>
     //        return false;
     //    }
 
-    //    foreach( var existingRange in Workbook!.GetNames( name ) )
+    //    foreach( var existingRange in WorksheetDefinitions!.GetNames( name ) )
     //    {
     //        if( existingRange.SheetIndex != SheetIndex )
     //            continue;
 
     //        Logger.Warning<string, string>("Named range {0}!{1} already exists, replacing it", SheetName!, name);
 
-    //        Workbook.RemoveName( existingRange.NameName );
+    //        WorksheetDefinitions.RemoveName( existingRange.NameName );
     //    }
 
     //    try
     //    {
-    //        result = Workbook!.CreateName();
+    //        result = WorksheetDefinitions!.CreateName();
     //        result.NameName = name;
     //        result.RefersToFormula = rangeFormula;
 
