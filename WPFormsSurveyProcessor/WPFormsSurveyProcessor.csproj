@@ -1,48 +1,49 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-	  <AssemblyName>WpFormsProcessor</AssemblyName>
-	  <RootNamespace>J4JSoftware.WpFormsSurvey</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <Authors>Mark A. Olbert</Authors>
-	  <Company>Jump for Joy Software</Company>
-	  <Product>J4JSoftware WPForms Export Console Application</Product>
-	  <Description>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</Description>
-	  <Copyright>© Mark A. Olbert all rights reserved</Copyright>
-	  <RepositoryUrl>https://github.com/markolbert/WPFormsSurveyProcessor</RepositoryUrl>
-	  <RepositoryType>git</RepositoryType>
-	  <Version>1.1.1.0</Version>
-	  <AssemblyVersion>1.1.1.0</AssemblyVersion>
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-	  <PackageDescription>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</PackageDescription>
-	  <PackageIcon>Diego nuspec.png</PackageIcon>
-	  <PackageReleaseNotes>fix bug caused by ignoring app config file</PackageReleaseNotes>
-	  <PackageReadmeFile>readme.md</PackageReadmeFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<AssemblyName>WpFormsProcessor</AssemblyName>
+		<RootNamespace>J4JSoftware.WpFormsSurvey</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Authors>Mark A. Olbert</Authors>
+		<Company>Jump for Joy Software</Company>
+		<Product>J4JSoftware WPForms Export Console Application</Product>
+		<Description>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</Description>
+		<Copyright>© Mark A. Olbert all rights reserved</Copyright>
+		<RepositoryUrl>https://github.com/markolbert/WPFormsSurveyProcessor</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Version>2.0.0.0</Version>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<PackageDescription>console application for exporting WPForms forms and survey responses to Excel (.xlsx) files</PackageDescription>
+		<PackageIcon>Diego nuspec.png</PackageIcon>
+		<PackageReleaseNotes>modify target Excel file if it already exists, and adjust sheet/range names accordingly</PackageReleaseNotes>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<EnablePreviewFeatures>true</EnablePreviewFeatures>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Alba.CsConsoleFormat-NoXaml" Version="1.0.0" />
-    <PackageReference Include="J4JSoftware.Configuration.CommandLine" Version="4.2.0" />
-    <PackageReference Include="J4JSoftware.Configuration.J4JCommandLine.ColorfulHelp" Version="1.3.0" />
-    <PackageReference Include="J4JSoftware.DependencyInjection" Version="2.3.0" />
-    <PackageReference Include="J4JSoftware.Logging" Version="4.2.0" />
-    <PackageReference Include="J4JSoftware.WpFormsSurvey" Version="1.0.0" />
-    <PackageReference Include="NPOI" Version="2.6.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Alba.CsConsoleFormat-NoXaml" Version="1.0.0" />
+		<PackageReference Include="J4JSoftware.Configuration.CommandLine" Version="4.2.0" />
+		<PackageReference Include="J4JSoftware.Configuration.J4JCommandLine.ColorfulHelp" Version="1.3.0" />
+		<PackageReference Include="J4JSoftware.DependencyInjection" Version="2.3.0" />
+		<PackageReference Include="J4JSoftware.Logging" Version="4.2.0" />
+		<PackageReference Include="J4JSoftware.WpFormsSurvey" Version="1.0.0" />
+		<PackageReference Include="NPOI" Version="2.6.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\J4JCommandLine\ColorfulHelp\ColorfulHelp.csproj" />
-    <ProjectReference Include="..\..\J4JCommandLine\J4JCommandLine\J4JCommandLine.csproj" />
-    <ProjectReference Include="..\..\J4JLogging\J4JLogging\J4JLogging.csproj" />
-    <ProjectReference Include="..\..\ProgrammingUtilities\DependencyInjection\DependencyInjection.csproj" />
-    <ProjectReference Include="..\WpFormsSurvey\WpFormsSurvey.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\J4JCommandLine\ColorfulHelp\ColorfulHelp.csproj" />
+		<ProjectReference Include="..\..\J4JCommandLine\J4JCommandLine\J4JCommandLine.csproj" />
+		<ProjectReference Include="..\..\J4JLogging\J4JLogging\J4JLogging.csproj" />
+		<ProjectReference Include="..\..\ProgrammingUtilities\DependencyInjection\DependencyInjection.csproj" />
+		<ProjectReference Include="..\WpFormsSurvey\WpFormsSurvey.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\..\Media\JumpForJoy\Diego nuspec.png">
@@ -53,49 +54,49 @@
 		<None Include="../LICENSE.md" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="appConfig.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\export-json.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\filter-posts.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\filter-responses.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\form-posts.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\nav2wpposts.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\posts.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\assets\survey-entries.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\readme.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\developer.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\changes.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\form-info-service.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\parsing-service.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="docs\docs.md">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="appConfig.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\export-json.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\filter-posts.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\filter-responses.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\form-posts.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\nav2wpposts.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\posts.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\assets\survey-entries.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\readme.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+			<None Update="docs\developer.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\changes.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\form-info-service.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\parsing-service.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="docs\docs.md">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>
