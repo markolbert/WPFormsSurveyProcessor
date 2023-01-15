@@ -7,6 +7,7 @@
 - [Overview](#overview)
 - [Command Line Options](#command-line-options)
 - [Export File Name](#export-file-name)
+- [Modification of Existing Excel File](#modification-of-existing-excel-file)
 - [Defining Named Ranges](#defining-named-ranges)
 - [Creating the Required Files](#creating-the-required-files)
   - [Creating the Forms Definition File](#creating-the-forms-definition-file)
@@ -37,7 +38,6 @@ The option flags are case insensitive.
 |/e, /entries|Path to the file containing the WpForms user entries. See below for details on creating this file.|
 |/x, /excel|Path to the export file created by the program. *Warning: existing files will be overwritten without confirmation.*|
 |/s, /scope|Defines the information/worksheets to be exported. See below for details.|
-|/t, /ts|Defines the time stamp, if any, added to the Excel file name. See below for details.|
 |/f, /formIds/|A list of form ids to export. If not specified, all forms will be exported.|
 |/i, /formInfo|Displays a list of form names and ids contained in the provided WordPress posts file.|
 
@@ -47,13 +47,15 @@ The /f and /s options allow multiple values to be provided, separated by either 
 
 When you specify an export file name it is checked to ensure it can be written. If for some reason the path you supply is not, the export file name will be changed to something that is writable. This could result in the export file being written to the current directory, so if you don't find the file where you expect it, review the actual name of the file being written. That's echoed to the console when it is created.
 
-You can modify how export files are time stamped through the command line or by modifying the `appJson.config` file, located in the executable folder. The available options are:
+## Modification of Existing Excel File
 
-|Time Stamp Option|Description|
-|:---------------:|-----------|
-|None|No time stamp is added|
-|DateOnly|A yyyy-mm-dd (year/month/day) time stamp is added|
-|DateAndTime|A yyyy-mm-dd hh-mm-ss (year/month/day hours/minutes/seconds) time stamp is added|
+If the Excel file you specify does not exist a new file is created. However, if the file *does* exist it is *modified* rather than being replaced.
+
+When modifying an existing file, if an exported worksheet will cause a *name collision* (i.e., the sheet's name matches an existing sheet in the file), the newly-exported sheet's name will have a numeric suffix added to it. The suffix will be the first integer value which defines a unique name. For example, if the file contains a sheet named *responses*, the exported responses sheet will be named *responses2* (a suffix of 1 is never assigned).
+
+Similarly, the name of a named range will be modified in the same fashion to avoid naming collisions.
+
+This approach is used to simplify updating an existing Excel file with new data. Unfortunately, if you simply replace a sheet in an Excel file with a new sheet, references to the old sheet (and its named ranges) will convert to **#REF** errors, and would need to be fixed manually. By avoiding name collisions you can update existing forumulas by doing a search and replace on the modified file, changing references to the old sheet and range names to the new sheet and range names.
 
 ## Defining Named Ranges
 
@@ -63,9 +65,11 @@ Here are the default settings:
 
 ```json
 {
-  "ExcelFileInfo" : {
-    "RangeConfigurations": {
-      "Forms": [
+  "WorksheetDefinitions": [
+    {
+      "SheetType": "Forms",
+      "SheetName": "forms",
+      "Ranges": [
         {
           "Name": "FormIds",
           "Context": "Worksheet",
@@ -77,24 +81,36 @@ Here are the default settings:
           "FirstColumn": "A",
           "LastColumn": "B"
         }
-      ],
-      "Fields": [
+      ]
+    },
+    {
+      "SheetType": "Fields",
+      "SheetName": "fields",
+      "Ranges": [
         {
           "Name": "Fields",
           "Context": "Worksheet",
           "FirstColumn": "C",
           "LastColumn": "E"
         }
-      ],
-      "Choices": [
+      ]
+    },
+    {
+      "SheetType": "Choices",
+      "SheetName": "choices",
+      "Ranges": [
         {
           "Name": "Choices",
           "Context": "Worksheet",
           "FirstColumn": "E",
           "LastColumn": "F"
         }
-      ],
-      "Submissions": [
+      ]
+    },
+    {
+      "SheetType": "Responses",
+      "SheetName": "responses",
+      "Ranges": [
         {
           "Name": "FieldKeys",
           "Context": "Worksheet",
@@ -117,11 +133,32 @@ Here are the default settings:
         }
       ]
     }
-  }
+  ]
 }
 ```
 
-Each exported spreadsheet is targeted by a property identified by its name, and includes one array of objects defining the named ranges to be created. The full syntax for the named range object looks like this:
+Each exportable spreadsheet is configured through an instance of `WorksheetInfo`. The collection of `WorksheetInfo` objects is contained in a property of the `Configuration` object governing how the program runs:
+
+```csharp
+public List<WorksheetInfo> WorksheetDefinitions { get; set; } = new();
+```
+
+A `WorksheetInfo` object contains information about the type of worksheet it defines, the base name to be given to the sheet when it is created and any named ranges it may define:
+
+```csharp
+ public class WorksheetInfo
+{
+  public SheetType SheetType { get; set; } = SheetType.Undefined;
+  public string SheetName { get; set; } = string.Empty;
+  public List<NamedRangeConfiguration> Ranges { get; set; } = new();
+
+  public bool HasRanges => Ranges.Any();
+
+  public bool IsValid();
+}
+```
+
+The full syntax for the named range object looks like this:
 
 ```json
 {
