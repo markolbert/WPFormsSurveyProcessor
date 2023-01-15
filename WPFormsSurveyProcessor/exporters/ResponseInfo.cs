@@ -17,4 +17,4 @@
 
 namespace J4JSoftware.WpFormsSurvey;
 
-public record SubmissionInfo( List<Form> Forms, List<IndividualSubmission> UserSubmissions );
+public record ResponseInfo( List<Form> Forms, List<IndividualSubmission> UserSubmissions );
