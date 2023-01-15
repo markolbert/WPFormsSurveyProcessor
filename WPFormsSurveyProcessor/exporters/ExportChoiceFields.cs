@@ -16,7 +16,6 @@
 // with WpFormsSurveyProcessor. If not, see <https://www.gnu.org/licenses/>.
 
 using J4JSoftware.Logging;
-using NPOI.XSSF.UserModel;
 
 namespace J4JSoftware.WpFormsSurvey;
 
@@ -27,13 +26,13 @@ internal class ExportChoiceFields : ExportSurveyBase<ChoiceFieldInfo>
     public ExportChoiceFields( 
         Configuration config,
         IJ4JLogger logger )
-        : base( config, logger )
+        : base( config, SheetType.Choices, logger )
     {
     }
 
-    public bool Initialize( XSSFWorkbook workbook, string sheetName, List<Form> forms )
+    public bool Initialize( string sheetName, List<Form> forms )
     {
-        if( !Initialize(workbook, sheetName))
+        if( !Initialize(sheetName))
             return false;
 
         _forms = forms;
@@ -76,15 +75,9 @@ internal class ExportChoiceFields : ExportSurveyBase<ChoiceFieldInfo>
     protected override bool FinishExport()
     {
         AutoSizeColumns();
+        CreateNamedRanges( out _ );
 
-        if (RangeConfigurations?.Choices != null)
-            Worksheet!.CreateWorksheetNamedRanges(RangeConfigurations.Choices,
-                                                  RecordNumber + 1,
-                                                  out _,
-                                                  Logger);
-        else Logger.Verbose("No named ranges defined");
-
-        Logger.Information("    ...done");
+        Logger.Information( "    ...done" );
         return true;
     }
 

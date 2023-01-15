@@ -21,22 +21,22 @@ using NPOI.SS.UserModel;
 
 namespace J4JSoftware.WpFormsSurvey;
 
-internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
+internal class ExportResponses : ExportSurveyBase<IUserFieldResponse>
 {
-    private SubmissionInfo? _submissionInfo;
+    private ResponseInfo? _submissionInfo;
     private int _users;
     private int _prevUserId;
 
-    public ExportSubmissions( 
+    public ExportResponses( 
         Configuration config,
         IJ4JLogger logger )
-        : base( config, logger )
+        : base( config, SheetType.Responses, logger )
     {
     }
 
-    public bool Initialize( IWorkbook workbook, string sheetName, SubmissionInfo dataSource )
+    public bool Initialize( string sheetName, ResponseInfo dataSource )
     {
-        if( !Initialize( workbook, sheetName ) )
+        if( !Initialize( sheetName ) )
             return false;
 
         _submissionInfo = dataSource;
@@ -169,15 +169,9 @@ internal class ExportSubmissions : ExportSurveyBase<IUserFieldResponse>
     protected override bool FinishExport()
     {
         AutoSizeColumns();
+        CreateNamedRanges( out _ );
 
-        if( RangeConfigurations?.Submissions != null )
-            Worksheet!.CreateWorksheetNamedRanges( RangeConfigurations.Submissions,
-                                                   RecordNumber + 1,
-                                                   out _,
-                                                   Logger );
-        else Logger.Verbose( "No named ranges defined" );
-
-        Logger.Information("    ...done");
+        Logger.Information( "    ...done" );
         return true;
     }
 

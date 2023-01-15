@@ -33,14 +33,11 @@ internal partial class DeusEx
         options.Bind<Configuration, string>( x => x.PostsFilePath, "p", "posts" )!
                .SetDescription("path to JSON file containing WpForms' WordPress posts");
 
-        options.Bind<Configuration, Exporters>( x => x.ExcelFileInfo.InformationToExport, "s", "scope" )!
+        options.Bind<Configuration, Exporters>( x => x.InformationToExport, "s", "scope" )!
                .SetDescription( "information to export" );
 
-        options.Bind<Configuration, string>(x => x.ExcelFileInfo.ExcelPath, "x", "excel")!
+        options.Bind<Configuration, string>(x => x.ExcelPath, "x", "excel")!
                .SetDescription("path to Excel file to be created");
-
-        options.Bind<Configuration, ExcelTimeStamp>(x => x.ExcelFileInfo.TimeStamp, "t", "ts")!
-               .SetDescription("define the time stamp, if any, added to the Excel file name");
 
         options.Bind<Configuration, List<int>>( x => x.FormIds, "f", "formIds" )!
                .SetDescription("one or more WpForms ids to process (empty means process all)");
