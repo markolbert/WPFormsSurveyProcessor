@@ -47,6 +47,7 @@
 <li><a href="#overview">Overview</a></li>
 <li><a href="#command-line-options">Command Line Options</a></li>
 <li><a href="#export-file-name">Export File Name</a></li>
+<li><a href="#modification-of-existing-excel-file">Modification of Existing Excel File</a></li>
 <li><a href="#defining-named-ranges">Defining Named Ranges</a></li>
 <li><a href="#creating-the-required-files">Creating the Required Files</a>
 <ul>
@@ -107,10 +108,6 @@
 <td>Defines the information/worksheets to be exported. See below for details.</td>
 </tr>
 <tr>
-<td style="text-align:center">/t, /ts</td>
-<td>Defines the time stamp, if any, added to the Excel file name. See below for details.</td>
-</tr>
-<tr>
 <td style="text-align:center">/f, /formIds/</td>
 <td>A list of form ids to export. If not specified, all forms will be exported.</td>
 </tr>
@@ -123,36 +120,20 @@
 <p>The /f and /s options allow multiple values to be provided, separated by either commas or spaces.</p>
 <h2 id="export-file-name">Export File Name</h2>
 <p>When you specify an export file name it is checked to ensure it can be written. If for some reason the path you supply is not, the export file name will be changed to something that is writable. This could result in the export file being written to the current directory, so if you don't find the file where you expect it, review the actual name of the file being written. That's echoed to the console when it is created.</p>
-<p>You can modify how export files are time stamped through the command line or by modifying the <code>appJson.config</code> file, located in the executable folder. The available options are:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Time Stamp Option</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">None</td>
-<td>No time stamp is added</td>
-</tr>
-<tr>
-<td style="text-align:center">DateOnly</td>
-<td>A yyyy-mm-dd (year/month/day) time stamp is added</td>
-</tr>
-<tr>
-<td style="text-align:center">DateAndTime</td>
-<td>A yyyy-mm-dd hh-mm-ss (year/month/day hours/minutes/seconds) time stamp is added</td>
-</tr>
-</tbody>
-</table>
+<h2 id="modification-of-existing-excel-file">Modification of Existing Excel File</h2>
+<p>If the Excel file you specify does not exist a new file is created. However, if the file <em>does</em> exist it is <em>modified</em> rather than being replaced.</p>
+<p>When modifying an existing file, if an exported worksheet will cause a <em>name collision</em> (i.e., the sheet's name matches an existing sheet in the file), the newly-exported sheet's name will have a numeric suffix added to it. The suffix will be the first integer value which defines a unique name. For example, if the file contains a sheet named <em>responses</em>, the exported responses sheet will be named <em>responses2</em> (a suffix of 1 is never assigned).</p>
+<p>Similarly, the name of a named range will be modified in the same fashion to avoid naming collisions.</p>
+<p>This approach is used to simplify updating an existing Excel file with new data. Unfortunately, if you simply replace a sheet in an Excel file with a new sheet, references to the old sheet (and its named ranges) will convert to <strong>#REF</strong> errors, and would need to be fixed manually. By avoiding name collisions you can update existing forumulas by doing a search and replace on the modified file, changing references to the old sheet and range names to the new sheet and range names.</p>
 <h2 id="defining-named-ranges">Defining Named Ranges</h2>
 <p>The default <em>appConfig.json</em> configuration file defines a number of named ranges that are created when data is exported. You can define your own by modifying the file, which is located in the directory/folder where you installed the application.</p>
 <p>Here are the default settings:</p>
 <pre><code class="language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">&quot;ExcelFileInfo&quot;</span> <span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-    <span class="hljs-attr">&quot;RangeConfigurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
-      <span class="hljs-attr">&quot;Forms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-attr">&quot;WorksheetDefinitions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;SheetType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Forms&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;SheetName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;forms&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Ranges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
         <span class="hljs-punctuation">{</span>
           <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;FormIds&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
@@ -164,24 +145,36 @@
           <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;B&quot;</span>
         <span class="hljs-punctuation">}</span>
-      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;Fields&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;SheetType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Fields&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;SheetName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;fields&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Ranges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
         <span class="hljs-punctuation">{</span>
           <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Fields&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;C&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;E&quot;</span>
         <span class="hljs-punctuation">}</span>
-      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;Choices&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;SheetType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Choices&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;SheetName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;choices&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Ranges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
         <span class="hljs-punctuation">{</span>
           <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Choices&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;FirstColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;E&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;LastColumn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;F&quot;</span>
         <span class="hljs-punctuation">}</span>
-      <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
-      <span class="hljs-attr">&quot;Submissions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;SheetType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Responses&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;SheetName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;responses&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;Ranges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
         <span class="hljs-punctuation">{</span>
           <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;FieldKeys&quot;</span><span class="hljs-punctuation">,</span>
           <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Worksheet&quot;</span><span class="hljs-punctuation">,</span>
@@ -204,10 +197,25 @@
         <span class="hljs-punctuation">}</span>
       <span class="hljs-punctuation">]</span>
     <span class="hljs-punctuation">}</span>
-  <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
-<p>Each exported spreadsheet is targeted by a property identified by its name, and includes one array of objects defining the named ranges to be created. The full syntax for the named range object looks like this:</p>
+<p>Each exportable spreadsheet is configured through an instance of <code>WorksheetInfo</code>. The collection of <code>WorksheetInfo</code> objects is contained in a property of the <code>Configuration</code> object governing how the program runs:</p>
+<pre><code class="language-csharp"><span class="hljs-keyword">public</span> List&lt;WorksheetInfo&gt; WorksheetDefinitions { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } = <span class="hljs-keyword">new</span>();
+</code></pre>
+<p>A <code>WorksheetInfo</code> object contains information about the type of worksheet it defines, the base name to be given to the sheet when it is created and any named ranges it may define:</p>
+<pre><code class="language-csharp"> <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">WorksheetInfo</span>
+{
+  <span class="hljs-keyword">public</span> SheetType SheetType { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } = SheetType.Undefined;
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> SheetName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } = <span class="hljs-built_in">string</span>.Empty;
+  <span class="hljs-keyword">public</span> List&lt;NamedRangeConfiguration&gt; Ranges { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } = <span class="hljs-keyword">new</span>();
+
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> HasRanges =&gt; Ranges.Any();
+
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">IsValid</span>()</span>;
+}
+</code></pre>
+<p>The full syntax for the named range object looks like this:</p>
 <pre><code class="language-json"><span class="hljs-punctuation">{</span>
     <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> range&#x27;s name<span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;Context&quot;</span><span class="hljs-punctuation">:</span> the value Worksheet or Workbook (see below)<span class="hljs-punctuation">,</span>
